@@ -1,0 +1,2740 @@
+'form_Login 
+Option Compare Database
+Dim Rs 'As dao.Recordset
+Dim userName As String
+Dim userPass As String
+Dim userError As Boolean
+Dim userLock As Boolean
+Private Sub Command46_Click()
+    If userName = "" Then
+        lblMessage.Caption = "请输入用户名！"
+        txtUser.SetFocus
+        Exit Sub
+    End If
+    If userError Then
+        lblMessage.Caption = "用户名错误！"
+        txtUser.SetFocus
+        Exit Sub
+    End If
+    If IsNull(Me.txtPass) Or Trim(Me.txtPass) = "" Then
+        lblMessage.Caption = "请输入密码！"
+        txtPass.SetFocus
+        Exit Sub
+    End If
+    If Rs!pass <> Trim(txtPass) Then
+        lblMessage.Caption = "密码错误！"
+        txtPass.SetFocus
+        Exit Sub
+    End If
+    DoCmd.SetWarnings False
+    DoCmd.RunSQL ("update T_U set passcount = 0 where user = '" & Me.txtUser & "'")
+    DoCmd.SetWarnings True
+    user = Me.txtUser
+    If Rs!identity = "usr" Then
+        iden = "us"
+        DoCmd.OpenForm "普通用户"
+    Else
+        iden = "ad"
+        DoCmd.OpenForm "管理员"
+    End If
+    DoCmd.Close acForm, "登录窗体"
+End Sub
+Private Sub Command5_Click()
+    DoCmd.Quit
+End Sub
+Private Sub Form_Load()
+    txtUser.SetFocus
+End Sub
+Private Sub txtUser_GotFocus()
+    userName = ""
+    userPass = ""
+    userError = False
+    userLock = False
+End Sub
+Private Sub txtUser_LostFocus()
+    If IsNull(Me.txtUser) Or Trim(Me.txtUser) = "" Then
+        userName = ""
+        Exit Sub
+    End If
+    Set Rs = CurrentDb.OpenRecordset("select * from T_U where user = '" & Trim(Me.txtUser) & "'")
+    userName = Trim(Me.txtUser)
+    If Rs.EOF Then
+        userError = True
+        Exit Sub
+    End If
+End Sub
+'form_Admin 
+Option Compare Database
+Private Sub Command23_Click()
+    DoCmd.OpenForm "Q_CityResi_by_sq__xq"
+End Sub
+Private Sub Command24_Click()
+    DoCmd.OpenForm "Q_CityNotResi_by_sq__xq"
+End Sub
+Private Sub Command36_Click()
+    DoCmd.OpenForm "In_T_EC_Resi"
+End Sub
+Private Sub Command37_Click()
+    DoCmd.OpenForm "Q_EC_Resi_by_sq__xq"
+End Sub
+Private Sub Command38_Click()
+    DoCmd.OpenForm "Q_EC_NotResi_by_sq__xq"
+End Sub
+Private Sub Command45_Click()
+    DoCmd.OpenForm "Q_RuralResi_Collec"
+End Sub
+Private Sub Command46_Click()
+    DoCmd.OpenForm "Q_RuralNotResi"
+End Sub
+Private Sub Command47_Click()
+    DoCmd.OpenForm "Q_RuralResi_Indep"
+End Sub
+'form_Users 
+Option Compare Database
+Private Sub Command23_Click()
+    DoCmd.OpenForm "Q_CityResi_by_sq__xq"
+End Sub
+Private Sub Command24_Click()
+    DoCmd.OpenForm "Q_CityNotResi_by_sq__xq"
+End Sub
+Private Sub Command37_Click()
+    DoCmd.OpenForm "Q_EC_Resi_by_sq__xq"
+End Sub
+Private Sub Command38_Click()
+    DoCmd.OpenForm "Q_EC_NotResi_by_sq__xq"
+End Sub
+Private Sub Command43_Click()
+    DoCmd.OpenForm "Q_RuralResi_Collec"
+End Sub
+Private Sub Command45_Click()
+    DoCmd.OpenForm "Q_RuralResi_Indep"
+End Sub
+Private Sub Command47_Click()
+    DoCmd.OpenForm "Q_RuralNotResi"
+End Sub
+'In_RuralNotResi
+Option Compare Database
+Private Sub cmd_save_Click()
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑信息查询系统"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+'In_RuralResi_Collec
+Option Compare Database
+Private Sub cmd_save_Click()
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑信息查询系统"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+'In_RuralResi_Indep
+Option Compare Database
+Private Sub cmd_save_Click()
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑信息查询系统"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Form_Current()
+  On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' In_T_BD_BuildInfo_CityNotResi
+Option Compare Database
+Private Sub cmd_save_Click()
+    If IsNull(dwmc) Or Trim(dwmc) = "" Then
+        lblMessage.Caption = "**请选择单位名称"
+        Exit Sub
+    End If
+        If IsNull(sqid) Or Trim(sqid) = "" Then
+        lblMessage.Caption = "**请选择社区名称"
+        Exit Sub
+    End If
+    If IsNull(jzmc) Or Trim(jzmc) = "" Then
+        lblMessage.Caption = "**请输入建筑名称"
+        Exit Sub
+    End If
+     If IsNull(cqdw) Or Trim(cqdw) = "" Then
+        lblMessage.Caption = "**请输入产权单位"
+        Exit Sub
+    End If
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑信息查询系统"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Combo290_GotFocus()
+    Combo290.Requery
+End Sub
+Private Sub Combo95_GotFocus()
+    Combo95.Requery
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' In_T_BD_BuildInfo_CityResi
+Option Compare Database
+Private Sub cmd_save_Click()
+    If IsNull(xqid) Or Trim(xqid) = "" Then
+        lblMessage.Caption = "**请选择小区名称"
+        Exit Sub
+    End If
+    If IsNull(jzmc) Or Trim(jzmc) = "" Then
+        lblMessage.Caption = "**请输入建筑名称"
+        Exit Sub
+    End If
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑信息查询系统"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Combo117_GotFocus()
+    Combo117.Requery
+End Sub
+
+Private Sub Combo119_GotFocus()
+    Combo119.Requery
+End Sub
+
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' In_T_BD_sq
+Option Compare Database
+Private Sub cmd_del_Click()
+    If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要删除的社区名称！", vbInformation, "社区信息管理"
+        Exit Sub
+    End If
+    strsql = "delete from T_BD_sq where id=" + Lst_sqmc.Value
+    lblMessage.Caption = strsql
+    If MsgBox("是否确定删除该社区", 49, "是否删除") = vbOK Then
+        DoCmd.SetWarnings False
+        DoCmd.RunSQL (strsql)
+        DoCmd.SetWarnings True
+    End If
+    MsgBox "删除成功！", vbInformation, "社区信息管理"
+    Lst_sqmc.Requery
+    Lbl_attention.Visible = True
+End Sub
+Private Sub cmd_save_Click()
+    If IsNull(Txt_sqmc) Or Trim(Txt_sqmc) = "" Then
+        MsgBox "请输入社区名称！", vbInformation, "社区信息管理"
+        Txt_sqmc.SetFocus
+         Exit Sub
+    End If
+    Set Rs = CurrentDb.OpenRecordset("select * from T_BD_sq where sqmc = '" & Trim(Me.Txt_sqmc) & "'")
+    If Not Rs.EOF Then
+        MsgBox "社区“" & Trim(Me.Txt_sqmc) & "”已经存在，请重新输入社区名称！", vbInformation, "社区信息管理"
+        Txt_sqmc.SetFocus
+        Exit Sub
+    End If
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "添加成功！", vbInformation, "社区信息管理"
+    Lst_sqmc.Requery
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub cmdupdate_Click()
+    If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要修改的社区名称！", vbInformation, "社区信息管理"
+        Exit Sub
+    End If
+    strsqmc = InputBox("请输入新的社区名称", "社区修改")
+    If Trim(strsqmc) <> "" Then
+        If MsgBox("是否确定要将该社区修改为“" + strsqmc + "”", 49, "是否修改") = vbOK Then
+            strsql = "update T_BD_sq set sqmc='" + strsqmc + "' where id=" + Lst_sqmc.Value
+            DoCmd.SetWarnings False
+            DoCmd.RunSQL (strsql)
+            DoCmd.SetWarnings True
+            MsgBox "修改成功！", vbInformation, "社区信息管理"
+            Lst_sqmc.Requery
+        End If
+    End If
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+Private Sub Lst_sqmc_Click()
+lblMessage.Caption = ""
+lblMessage.Caption = lblMessage.Caption + "    " + Lst_sqmc.Value
+End Sub
+' In_T_BD_xq_dw_CityNotResi
+Option Compare Database
+Private Sub cmd_del_Click()
+If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要删除的单位名称！", vbInformation, "单位信息管理"
+        Exit Sub
+    End If
+    strsql = "delete from T_BD_xq_dw_CityNotResi where id=" + Lst_sqmc.Value
+    If MsgBox("是否确定删除该单位", 49, "是否删除") = vbOK Then
+        DoCmd.SetWarnings False
+        DoCmd.RunSQL (strsql)
+        DoCmd.SetWarnings True
+    End If
+    MsgBox "删除成功！", vbInformation, "单位信息管理"
+    Lst_sqmc.Requery
+    Lbl_attention.Visible = True
+End Sub
+Private Sub cmd_save_Click()
+    If IsNull(Txt_sqmc) Or Trim(Txt_sqmc) = "" Then
+        MsgBox "请输入单位名称！", vbInformation, "单位信息管理"
+        Txt_sqmc.SetFocus
+         Exit Sub
+    End If
+    Set Rs = CurrentDb.OpenRecordset("select * from T_BD_xq_dw_CityNotResi where dwmc = '" & Trim(Me.Txt_sqmc) & "'")
+    If Not Rs.EOF Then
+        MsgBox "单位“" & Trim(Me.Txt_sqmc) & "”已经存在，请重新输入单位名称！", vbInformation, "单位信息管理"
+        Txt_sqmc.SetFocus
+        Exit Sub
+    End If
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "添加成功！", vbInformation, "单位信息管理"
+    Lst_sqmc.Requery
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+On Error Resume Next
+DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub cmdupdate_Click()
+    If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要修改的单位名称！", vbInformation, "单位信息管理"
+        Exit Sub
+    End If
+    strsqmc = InputBox("请输入新的单位名称", "单位修改")
+    If Trim(strsqmc) <> "" Then
+        If MsgBox("是否确定要将该单位修改为“" + strsqmc + "”", 49, "是否修改") = vbOK Then
+            strsql = "update T_BD_xq_dw_CityNotResi set dwmc='" + strsqmc + "' where id=" + Lst_sqmc.Value
+            DoCmd.SetWarnings False
+            DoCmd.RunSQL (strsql)
+            DoCmd.SetWarnings True
+            MsgBox "修改成功！", vbInformation, "单位信息管理"
+            Lst_sqmc.Requery
+        End If
+    End If
+End Sub
+Private Sub Form_Current()
+  On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' In_T_BD_xq_dw_CityResi
+Option Compare Database
+Private Sub cmd_del_Click()
+If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要删除的小区名称！", vbInformation, "小区信息管理"
+        Exit Sub
+    End If
+    strsql = "delete from T_BD_xq_dw_CityResi where id=" + Lst_sqmc.Value
+    lblMessage.Caption = strsql
+    If MsgBox("是否确定删除该小区", 49, "是否删除") = vbOK Then
+        DoCmd.SetWarnings False
+        DoCmd.RunSQL (strsql)
+        DoCmd.SetWarnings True
+    End If
+    MsgBox "删除成功！", vbInformation, "小区信息管理"
+    Lst_sqmc.Requery
+    Lbl_attention.Visible = True
+End Sub
+Private Sub cmd_save_Click()
+    If IsNull(Txt_sqmc) Or Trim(Txt_sqmc) = "" Then
+        MsgBox "请输入小区名称！", vbInformation, "小区信息管理"
+        Txt_sqmc.SetFocus
+         Exit Sub
+    End If
+    Set Rs = CurrentDb.OpenRecordset("select * from T_BD_xq_dw_CityResi where xqmc = '" & Trim(Me.Txt_sqmc) & "'")
+    If Not Rs.EOF Then
+        MsgBox "小区“" & Trim(Me.Txt_sqmc) & "”已经存在，请重新输入小区名称！", vbInformation, "小区信息管理"
+        Txt_sqmc.SetFocus
+        Exit Sub
+    End If
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "添加成功！", vbInformation, "小区信息管理"
+    Lst_sqmc.Requery
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+On Error Resume Next
+DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub cmdupdate_Click()
+    If IsNull(Lst_sqmc.Value) Then
+         MsgBox "请选择要修改的小区名称！", vbInformation, "小区信息管理"
+        Exit Sub
+    End If
+    strsqmc = InputBox("请输入新的小区名称", "小区修改")
+    If Trim(strsqmc) <> "" Then
+        If MsgBox("是否确定要将该小区修改为“" + strsqmc + "”", 49, "是否修改") = vbOK Then
+            strsql = "update T_BD_xq_dw_CityResi set xqmc='" + strsqmc + "' where id=" + Lst_sqmc.Value
+            DoCmd.SetWarnings False
+            DoCmd.RunSQL (strsql)
+            DoCmd.SetWarnings True
+            MsgBox "修改成功！", vbInformation, "小区信息管理"
+            Lst_sqmc.Requery
+        End If
+    End If
+End Sub
+Private Sub Form_Current()
+  On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+Private Sub Lst_sqmc_Click()
+    lblMessage.Caption = ""
+    lblMessage.Caption = lblMessage.Caption + "    " + Lst_sqmc.Value
+End Sub
+' In_T_EC_NotResi
+Option Compare Database
+Private Sub cmd_save_Click()
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑能耗信息录入"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' In_T_EC_Resi
+Option Compare Database
+Private Sub cmd_save_Click()
+    DoCmd.GoToRecord , "", acNewRec
+    MsgBox "录入成功！", vbInformation, "建筑能耗信息录入"
+    DoCmd.GoToRecord , "", acNewRec
+End Sub
+Private Sub cmdquit_Click()
+    On Error Resume Next
+    DoCmd.RunCommand acCmdUndo
+    DoCmd.Close
+End Sub
+Private Sub Form_Current()
+    On Error Resume Next
+    DoCmd.GoToRecord , "", acNewRec
+    lblMessage.Caption = ""
+End Sub
+' Q_by_ID_RuralNotResi
+Option Compare Database
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+    If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_RuralNotResi.*, T_BD_BuildInfo_RuralNotResi.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_RuralNotResi"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_RuralNotResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_RuralResi_Collec
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+        If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+            Cancel = True
+        End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+        If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+            Cancel = True
+        End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_RuralResi_Collec.*, T_BD_BuildInfo_RuralResi_Collec.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_RuralResi_Collec"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_RuralResi_Collec.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_RuralResi_Indep
+Option Compare Database
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+    If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_RuralResi_Indep.*, T_BD_BuildInfo_RuralResi_Indep.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_RuralResi_Indep"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_RuralResi_Indep.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_T_BD_BuildInfo_CityNotResi
+Option Compare Database
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+    If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_CityNotResi.*, T_BD_BuildInfo_CityNotResi.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_CityNotResi"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_CityNotResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_T_BD_BuildInfo_CityNotResi_print
+Option Compare Database
+Private Sub Command297_Click()
+    DoCmd.PrintOut
+    DoCmd.Close acForm, "Q_by_ID_T_BD_BuildInfo_CityNotResi_print"
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_CityNotResi.*, T_BD_BuildInfo_CityNotResi.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_CityNotResi"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_CityNotResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+End Sub
+' Q_by_ID_T_BD_BuildInfo_CityResi
+Option Compare Database
+Dim jzbhstr As String
+Private Sub Com_update_Click()
+    jzbhstr = Me.Text209
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据,或者删除数据。", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    jzbhstr = Me.Text209
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    Else
+        Call w_Log(user, "修改", "城镇住宅建筑调查信息采集表", jzbhstr)
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1     '查询第一个记录
+    End If
+    strsql = "SELECT T_BD_BuildInfo_CityResi.*, T_BD_BuildInfo_CityResi.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_CityResi"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_CityResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+Private Sub Form_Delete(Cancel As Integer)
+    jzbhstr = Me.Text209
+    Call w_Log(user, "删除", "城镇住宅建筑调查信息采集表", jzbhstr)
+End Sub
+' Q_by_ID_T_BD_BuildInfo_CityResi_print
+Option Compare Database
+Private Sub Com_print_Click()
+    DoCmd.PrintOut
+    DoCmd.Close acForm, "Q_by_ID_T_BD_BuildInfo_CityResi_print"
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_BD_BuildInfo_CityResi.*, T_BD_BuildInfo_CityResi.ID "
+    strsql = strsql + " FROM T_BD_BuildInfo_CityResi"
+    strsql = strsql + " WHERE (((T_BD_BuildInfo_CityResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+End Sub
+' Q_by_ID_T_EC_NotResi
+Option Compare Database
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+    If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1     '查询第一个记录
+    End If
+    strsql = "SELECT T_EC_NotResi.*, T_EC_NotResi.ID "
+    strsql = strsql + " FROM T_EC_NotResi"
+    strsql = strsql + " WHERE (((T_EC_NotResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_T_EC_NotResi_print
+Option Compare Database
+Private Sub Com_print_Click()
+    DoCmd.PrintOut
+    DoCmd.Close acForm, "Q_by_ID_T_EC_NotResi_print"
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_EC_NotResi.*, T_EC_NotResi.ID "
+    strsql = strsql + " FROM T_EC_NotResi"
+    strsql = strsql + " WHERE (((T_EC_NotResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+End Sub
+' Q_by_ID_T_EC_Resi
+Option Compare Database
+Private Sub Com_update_Click()
+    Me.Form.AllowEdits = True
+    MsgBox "数据已经解锁，请在表格里直接修改数据！", vbInformation, "修改数据"
+End Sub
+Private Sub Form_BeforeDelConfirm(Cancel As Integer, Response As Integer)
+    If MsgBox("是否删除该数据?", vbYesNo, "删除数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_BeforeUpdate(Cancel As Integer)
+    If MsgBox("数据已经被修改,是否保存?", vbYesNo, "保存数据") = vbNo Then
+        Cancel = True
+    End If
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_EC_CityResi.*, T_EC_CityResi.ID "
+    strsql = strsql + " FROM T_EC_CityResi"
+    strsql = strsql + " WHERE (((T_EC_CityResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+    If iden = "ad" Then
+        Com_update.Visible = True
+        Command210.Visible = True
+        Com_del.Visible = True
+    End If
+End Sub
+' Q_by_ID_T_EC_Resi_print
+Option Compare Database
+Private Sub Com_print_Click()
+    DoCmd.PrintOut
+    DoCmd.Close acForm, "Q_by_ID_T_EC_Resi_print"
+End Sub
+Private Sub Form_Current()
+    Dim strsql As String
+    If IsNull(can_cityresi_id) Or Trim(can_cityresi_id) = "" Then
+        can_cityresi_id = 1
+    End If
+    strsql = "SELECT T_EC_CityResi.*, T_EC_CityResi.ID "
+    strsql = strsql + " FROM T_EC_CityResi"
+    strsql = strsql + " WHERE (((T_EC_CityResi.ID)="
+    strsql = strsql + can_cityresi_id + "));"
+    Me.Form.RecordSource = strsql
+    Me.Form.AllowEdits = False
+End Sub
+' Q_CityNotResi_by_sq__xq
+Option Compare Database
+Dim qdsql As String
+Private Sub Com_export_Click()
+    Dim Rs 'As dao.Recordset
+    Dim xlApp As Object     'Excel.Application
+    Dim xlBook As Object    'Excel.Workbook
+    Dim xlSheet As Object   'Excel.Worksheet
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlBook = xlApp.Workbooks.Add    '添加一个新的Book
+    Set xlSheet = xlApp.ActiveSheet     '使用当前的Sheet
+    Dim i As Long
+    Set Rs = CurrentDb.OpenRecordset(qdsql)
+    Dim sr As Integer
+    xlSheet.rows(1).RowHeight = 18
+    xlSheet.rows(2).RowHeight = 21
+    xlSheet.rows(3).RowHeight = 24
+    xlSheet.rows(4).RowHeight = 36
+    xlSheet.range("a1:aL4").HorizontalAlignment = -4108  '居中
+    xlSheet.range("a1:aL4").Font.Bold = True '字体加粗
+    xlSheet.range("a1:a4").merge
+    xlSheet.cells(1, 1) = "城镇" & Chr(10) & "非住宅" & Chr(10) & "建筑"
+    xlSheet.range("b1:L1").merge
+    xlSheet.cells(1, 2) = "第一部分：基本信息"
+    xlSheet.range("b1:L4").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.range("m1:ab1").merge
+    xlSheet.cells(1, 13) = "第二部分：建筑信息"
+    xlSheet.range("m1:ab4").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.range("ac1:ag1").merge
+    xlSheet.cells(1, 29) = "第四部分：使用情况"
+    xlSheet.range("ac1:ag4").Interior.Color = RGB(219, 238, 243) '背景的颜色 蓝灰色
+    xlSheet.range("ah1:ak1").merge
+    xlSheet.cells(1, 34) = "调查人信息（必填）"
+    xlSheet.range("ah1:ak4").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("aL1:aL4").merge
+    xlSheet.cells(1, 38) = "备注"
+    xlSheet.cells(1, 38).Interior.Color = RGB(227, 217, 206) '背景的颜色
+    xlSheet.range("b2:b4").merge
+    xlSheet.Columns(2).ColumnWidth = 12
+    xlSheet.cells(2, 2) = "单位名称"
+    xlSheet.range("c2:c4").merge
+    xlSheet.Columns(3).ColumnWidth = 20
+    xlSheet.cells(2, 3) = "建筑名称"
+    xlSheet.range("d2:d4").merge
+    xlSheet.Columns(4).ColumnWidth = 12
+    xlSheet.cells(2, 3) = "所属社区名称"
+    xlSheet.range("e2:e4").merge
+    xlSheet.Columns(5).ColumnWidth = 20
+    xlSheet.cells(2, 5) = "产权单位" & Chr(10) & "（产权人）"
+    xlSheet.range("f2:f4").merge
+    xlSheet.Columns(6).ColumnWidth = 60
+    xlSheet.cells(2, 6) = "建筑地址"
+    xlSheet.range("g2:g4").merge
+    xlSheet.cells(2, 7) = "是否产权登记" & Chr(10) & "（是/否）"
+    xlSheet.Columns(7).ColumnWidth = 8
+    xlSheet.range("h2:L2").merge
+    xlSheet.cells(2, 8) = "玻璃幕墙情况"
+    xlSheet.range("h3:h4").merge
+    xlSheet.cells(3, 8) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+    xlSheet.range("i3:i4").merge
+    xlSheet.cells(3, 9) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+    xlSheet.range("j3:j4").merge
+    xlSheet.cells(3, 10) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+    xlSheet.range("k3:k4").merge
+    xlSheet.cells(3, 11) = "竣工时间"
+    xlSheet.range("L3:L4").merge
+    xlSheet.cells(3, 12) = "设计使用年限"
+    xlSheet.range("m2:m4").merge
+    xlSheet.cells(2, 13) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+    xlSheet.range("n2:t2").merge
+    xlSheet.cells(2, 14) = "建筑概况"
+    xlSheet.range("n3:o3").merge
+    xlSheet.cells(3, 14) = "建筑层数"
+    xlSheet.cells(4, 14) = "地下层数"
+    xlSheet.cells(4, 15) = "地上层数"
+    xlSheet.range("p3:p4").merge
+    xlSheet.cells(3, 16) = "建筑高度" & Chr(10) & "米"
+    xlSheet.range("q3:s3").merge
+    xlSheet.cells(3, 17) = "建筑面积（平方米）"
+    xlSheet.cells(4, 17) = "总建筑面积"
+    xlSheet.cells(4, 18) = "地上" & Chr(10) & "建筑面积"
+    xlSheet.cells(4, 19) = "地下" & Chr(10) & "建筑面积"
+    xlSheet.range("t3:t4").merge
+    xlSheet.cells(3, 20) = "建造时间" & Chr(10) & "（____年）"
+    xlSheet.range("u2:u4").merge
+    xlSheet.cells(2, 21) = "结构类型" & Chr(10) & "A砌体结构（若中小学幼儿园等教育建筑\ 医疗建筑\福利院建筑\养老建筑\救灾建筑\基础设施建筑\大型商业建筑、文化、体育建筑：□底部框架-抗震墙结构  □内框架结构 □ 其他）" & Chr(10) & "B钢筋混凝土结构（若中小学幼儿园教育建筑\ 医疗建筑\福利院建筑\养老建筑\救灾建筑\基础设施建筑\大型商业建筑、文化、体育建筑：□单跨框架□非单跨框架）" & Chr(10) & "C钢结构   D木结构  E其他__"
+    xlSheet.Columns(21).ColumnWidth = 28
+    xlSheet.range("v2:v4").merge
+    xlSheet.cells(2, 22) = "建筑用途" & Chr(10) & "A中小学幼儿园教学楼宿舍楼等教育建筑  B其他学校建筑□医疗建筑  C福利院 " & Chr(10) & "D养老建筑 E办公建筑（ ①科研实验楼  ②其他）F疾控、消防等救灾建筑" & Chr(10) & "G商业建筑（①金融（银行）建筑 ②商场建筑 ③酒店旅馆建筑④餐饮建筑 ⑤其他）" & Chr(10) & "H文化建筑（①剧院电影院音乐厅礼堂 ②图书馆文化馆 ③博物馆展览馆 ④档案馆 ⑤其他）" & Chr(10) & "I体育建筑 J通信电力交通邮电广播电视等基础设施建筑" & Chr(10) & "K纪念建筑 L宗教建筑 M综合建筑（①住宅和商业综合 ②办公和商业综合 ③其它）" & Chr(10) & "N工业建筑  O仓储建筑  P其他___"
+    xlSheet.range("w2:w4").merge
+    xlSheet.cells(2, 23) = "是否采用减隔震" & Chr(10) & "A减震  B隔震" & Chr(10) & "C未采用 D减震、隔震"
+    xlSheet.range("x2:x4").merge
+    xlSheet.cells(2, 24) = "是否保护性建筑" & Chr(10) & "A否 B全国重点文物保护建筑  C省级文物保护建筑 D市县级文物保护建筑 E历史建筑"
+    xlSheet.range("y2:y4").merge
+    xlSheet.cells(2, 25) = "是否专业设计" & Chr(10) & "建造" & Chr(10) & "（是/否）"
+    xlSheet.range("z2:z4").merge
+    xlSheet.cells(2, 26) = "是否有连廊" & Chr(10) & "（是/否）"
+    xlSheet.range("aa2:aa4").merge
+    xlSheet.cells(2, 27) = "是否为简易楼" & Chr(10) & "（是/否）"
+    xlSheet.range("ab2:ab4").merge
+    xlSheet.cells(2, 28) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+    xlSheet.range("ac2:ac4").merge
+    xlSheet.cells(2, 29) = "变形损伤" & Chr(10) & "（有无明显裂缝、倾斜、变形）" & Chr(10) & "（有/无）"
+    xlSheet.range("ad2:ae2").merge
+    xlSheet.cells(2, 30) = "改造情况"
+    xlSheet.range("ad3:ad4").merge
+    xlSheet.cells(3, 30) = "是否进行过改造" & Chr(10) & "（是/否）"
+    xlSheet.range("ae3:ae4").merge
+    xlSheet.cells(3, 31) = "改造时间" & Chr(10) & "（____年）"
+    xlSheet.range("af2:ag2").merge
+    xlSheet.cells(2, 32) = "抗震加固"
+    xlSheet.range("af3:af4").merge
+    xlSheet.cells(3, 32) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+    xlSheet.range("ag3:ag4").merge
+    xlSheet.cells(3, 33) = "抗震加固时间" & Chr(10) & "（____年）"
+    xlSheet.range("ah2:ah4").merge
+    xlSheet.cells(2, 34) = "姓名"
+    xlSheet.range("ai2:ai4").merge
+    xlSheet.Columns(35).ColumnWidth = 12
+    xlSheet.cells(2, 35) = "联系电话"
+    xlSheet.range("aj2:aj4").merge
+    xlSheet.Columns(36).ColumnWidth = 25
+    xlSheet.cells(2, 36) = "单位"
+    xlSheet.range("ak2:ak4").merge
+    xlSheet.Columns(37).ColumnWidth = 12
+    xlSheet.cells(2, 37) = "调查日期"
+    sr = 5
+    Do While Not Rs.EOF
+        'xlSheet.Cells(sr, 1) = "建筑编号"
+        xlSheet.cells(sr + i, 1) = Rs("jzbh")
+        'xlSheet.Cells(sr, 2) = "单位名称"
+        xlSheet.cells(sr + i, 2) = Rs("dwmcstr")
+        'xlSheet.Cells(sr, 3) = "建筑名称"
+        xlSheet.cells(sr + i, 3) = Rs("jzmc")
+        'xlSheet.Cells(sr, 4) = "所属社区名称"
+        xlSheet.cells(sr + i, 4) = Rs("sqmc")
+        'xlSheet.Cells(sr, 5) = "产权单位"
+        xlSheet.cells(sr + i, 5) = Rs("cqdw")
+        'xlSheet.Cells(sr, 6) = "建筑地址"
+        xlSheet.cells(sr + i, 6) = Rs("address_sheng")
+        'xlSheet.Cells(sr, 4) = "是否产权登记" & Chr(10) & "（是/否）"
+        If (Rs("is_cqdj") = "TRUE") Then xlSheet.cells(sr + i, 7) = "是"
+        If (Rs("is_cqdj") = "FALSE") Then xlSheet.cells(sr + i, 7) = "否"
+         'xlSheet.Cells(sr, 9) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+        If (Rs("blmq_is") = "TRUE") Then xlSheet.cells(sr + i, 8) = "有"
+        If (Rs("blmq_is") = "FALSE") Then xlSheet.cells(sr + i, 8) = "无"
+        'xlSheet.Cells(sr, 10) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+        If Not (IsNull(Rs("blmq_lx"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 9) = "A"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 9) = "B"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 9) = "C"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 9) = "D"
+        End If
+        'xlSheet.Cells(sr, 11) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+        xlSheet.cells(sr + i, 10) = Rs("blmq_mj")
+        'xlSheet.Cells(sr, 12) = "竣工时间"
+        xlSheet.cells(sr + i, 11) = Rs("jgsj")
+        xlSheet.cells(sr + i, 11) = Format(xlSheet.cells(sr + i, 11), "yyyy/mm/dd")
+        'xlSheet.Cells(sr, 13) = "设计使用年限"
+        xlSheet.cells(sr + i, 12) = Rs("sjsynx")
+        'xlSheet.Cells(sr, 14) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+        If Not (IsNull(Rs("jzwlb"))) Then
+            If Rs("jzwlb") = "1" Then xlSheet.cells(sr + i, 13) = "楼房"
+            If Rs("jzwlb") = "2" Then xlSheet.cells(sr + i, 13) = "平房"
+        End If
+        'xlSheet.Cells(sr, 15) = "地下层数"
+        xlSheet.cells(sr + i, 14) = Rs("cs_below")
+        'xlSheet.Cells(sr, 16) = "地上层数"
+        xlSheet.cells(sr + i, 15) = Rs("cs_up")
+        'xlSheet.Cells(sr, 17) = "建筑高度" & Chr(10) & "米"
+        xlSheet.cells(sr + i, 16) = Rs("height")
+        'xlSheet.Cells(sr, 18) = "总建筑面积"
+        xlSheet.cells(sr + i, 17) = Rs("eara")
+        'xlSheet.Cells(sr, 19) = "地上" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 18) = Rs("eara_up")
+        'xlSheet.Cells(sr, 20) = "地下" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 19) = Rs("eara_below")
+        'xlSheet.Cells(sr, 21) = "建造时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 20) = Rs("jzsj")
+        Dim jglxstr As String
+        jglxstr = ""
+        If (Rs("jglx_jtjg") = "TRUE") Then
+            jglxstr = jglxstr + "A砌体结构"
+        End If
+        If (Rs("jtjg_dbkj") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "A底部框架"
+        End If
+        If (Rs("jtjg_nkj") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "A内框架结构"
+        End If
+        If (Rs("jtjg_qtjgqt") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "A其他"
+        End If
+        If (Rs("jtjg_gjhnt") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "B钢筋混凝土结构"
+        End If
+        If (Rs("jtjg_dkkj") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "B单跨框架"
+        End If
+        If (Rs("jtjg_fdkkj") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "B非单跨框架"
+        End If
+        If (Rs("jtjg_gjg") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "C钢结构"
+        End If
+        If (Rs("jtjg_mjg") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "D木结构"
+        End If
+        If (Rs("jtjg_qt") = "TRUE") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + "E其他"
+        End If
+        
+        If Not (Trim(Rs("jglx_txt")) = "") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + Rs("jglx_txt")
+        End If
+        xlSheet.cells(sr + i, 21) = jglxstr
+        Dim jzytstr As String
+        jzytstr = ""
+        If (Rs("jzyt_zxx") = "TRUE") Then
+            jzytstr = jzytstr + "A"
+        End If
+        If (Rs("jzyt_qtxx") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "B"
+        End If
+        If (Rs("jzyt_yljz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "医疗建筑"
+        End If
+        If (Rs("jzyt_fly") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "C"
+        End If
+        If (Rs("jzyt_yl") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "D"
+        End If
+        If (Rs("jzyt_bgjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "E"
+        End If
+         If (Rs("jzyt_bgjz_kysyl") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "E①"
+        End If
+         If (Rs("jzyt_bgjz_qt") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "E②"
+        End If
+        If (Rs("jzyt_jk") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "F"
+        End If
+        If (Rs("jzyt_syjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G"
+        End If
+         If (Rs("jzyt_syjz_jryh") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G①"
+        End If
+         If (Rs("jzyt_syjz_scjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G②"
+        End If
+        If (Rs("jzyt_syjz_jdlgjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G③"
+        End If
+        If (Rs("jzyt_syjz_cyjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G④"
+        End If
+        If (Rs("jzyt_cyjz_qt") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "G⑤"
+        End If
+        If (Rs("jzyt_whjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H"
+        End If
+        If (Rs("jzyt_whjz_jydyy") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H①"
+        End If
+         If (Rs("jzyt_whjz_tsg") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H②"
+        End If
+        If (Rs("jzyt_whjz_bwg") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H③"
+        End If
+        If (Rs("jzyt_whjz_dag") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H④"
+        End If
+        If (Rs("jzyt_whjz_qt") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "H⑤"
+        End If
+        If (Rs("jzyt_tyjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "I"
+        End If
+        If (Rs("jzyt_txdl") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "J"
+        End If
+        If (Rs("jzyt_jnjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "K"
+        End If
+        If (Rs("jzyt_zjjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "L"
+        End If
+        If (Rs("jzyt_zhjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "M"
+        End If
+        If (Rs("jzyt_zhjz_zz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "M①"
+        End If
+         If (Rs("jzyt_zhjz_bg") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "M②"
+        End If
+        If (Rs("jzyt_zhjz_qt") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "M③"
+         End If
+         If (Rs("jzyt_gyjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "N"
+        End If
+        If (Rs("jzyt_ccjz") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "O"
+        End If
+        If (Rs("jzyt_qt") = "TRUE") Then
+            If Not (Trim(jzytstr) = "") Then jzytstr = jzytstr + "、"
+            jzytstr = jzytstr + "P"
+        End If
+        If Not (Trim(Rs("jzyt_txt")) = "") Then
+            jzytstr = jzytstr + Rs("jzyt_txt")
+        End If
+            xlSheet.cells(sr + i, 22) = jzytstr
+        'xlSheet.Cells(sr, 23) = "是否采用减隔震" & Chr(10) & "A减震  B隔震" & Chr(10) & "C未采用 D减震、隔震"
+         If Not (IsNull(Rs("jgz"))) Then
+            If Rs("jgz") = "1" Then xlSheet.cells(sr + i, 23) = "A"
+            If Rs("jgz") = "2" Then xlSheet.cells(sr + i, 23) = "B"
+            If Rs("jgz") = "3" Then xlSheet.cells(sr + i, 23) = "C"
+            If Rs("jgz") = "4" Then xlSheet.cells(sr + i, 23) = "D"
+        End If
+        'xlSheet.Cells(sr, 24) = "是否保护性建筑" & Chr(10) & "A否 B全国重点文物保护建筑  C省级文物保护建筑 D市县级文物保护建筑 E历史建筑"
+        If Not (IsNull(Rs("bhjz"))) Then
+            If Rs("bhjz") = "1" Then xlSheet.cells(sr + i, 24) = "A"
+            If Rs("bhjz") = "2" Then xlSheet.cells(sr + i, 24) = "B"
+            If Rs("bhjz") = "3" Then xlSheet.cells(sr + i, 24) = "C"
+            If Rs("bhjz") = "4" Then xlSheet.cells(sr + i, 24) = "D"
+            If Rs("bhjz") = "5" Then xlSheet.cells(sr + i, 24) = "E"
+        End If
+        'xlSheet.Cells(sr, 25) = "是否专业设计" & Chr(10) & "建造" & Chr(10) & "（是/否）"
+        If (Rs("is_zysjjz") = "TRUE") Then xlSheet.cells(sr + i, 25) = "是"
+        If (Rs("is_zysjjz") = "FALSE") Then xlSheet.cells(sr + i, 25) = "否"
+        'xlSheet.Cells(sr, 26) = "是否有连廊" & Chr(10) & "（是/否）"
+        If (Rs("is_ll") = "TRUE") Then xlSheet.cells(sr + i, 26) = "是"
+        If (Rs("is_ll") = "FALSE") Then xlSheet.cells(sr + i, 26) = "否"
+        'xlSheet.Cells(sr, 27) = "是否为简易楼" & Chr(10) & "（是/否）"
+        If (Rs("is_jyl") = "TRUE") Then xlSheet.cells(sr + i, 27) = "是"
+        If (Rs("is_jyl") = "FALSE") Then xlSheet.cells(sr + i, 27) = "否"
+        'xlSheet.Cells(sr, 28) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+        If (Rs("is_mjgwg") = "TRUE") Then xlSheet.cells(sr + i, 28) = "是"
+        If (Rs("is_mjgwg") = "FALSE") Then xlSheet.cells(sr + i, 28) = "否"
+        'xlSheet.Cells(sr, 29) = "变形损伤" & Chr(10) & "（有无明显裂缝、倾斜、变形）" & Chr(10) & "（有/无）"
+        If (Rs("bxss") = "TRUE") Then xlSheet.cells(sr + i, 29) = "有"
+        If (Rs("bxss") = "FALSE") Then xlSheet.cells(sr + i, 29) = "无"
+        'xlSheet.Cells(sr, 31) = "是否进行过改造" & Chr(10) & "（是/否）"
+        If (Rs("is_gz") = "TRUE") Then xlSheet.cells(sr + i, 30) = "是"
+        If (Rs("is_gz") = "FALSE") Then xlSheet.cells(sr + i, 30) = "否"
+        'xlSheet.Cells(sr, 32) = "改造时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 31) = Rs("gzsj")
+        'xlSheet.Cells(sr, 33) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+        If (Rs("is_kzjg") = "TRUE") Then xlSheet.cells(sr + i, 32) = "是"
+        If (Rs("is_kzjg") = "FALSE") Then xlSheet.cells(sr + i, 32) = "否"
+        'xlSheet.Cells(sr, 34) = "抗震加固时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 33) = Rs("jgtime")
+        'xlSheet.Cells(sr, 36) = "姓名"
+        xlSheet.cells(sr + i, 34) = Rs("xxcjr")
+        'xlSheet.Cells(sr, 37) = "联系电话"
+        xlSheet.cells(sr + i, 35) = Rs("telephone")
+        'xlSheet.Cells(sr, 38) = "单位"
+        xlSheet.cells(sr + i, 36) = Rs("dw")
+        'xlSheet.Cells(sr, 39) = "调查日期"
+        xlSheet.cells(sr + i, 37) = Rs("dcrq")
+        xlSheet.cells(sr + i, 37) = Format(xlSheet.cells(sr + i, 37), "yyyy/mm/dd")
+         'xlSheet.Cells(sr, 38) = "备注"
+        xlSheet.cells(sr + i, 38) = Rs("bz")
+        Rs.MoveNext
+        i = i + 1
+    Loop
+    xlSheet.range("a1:aL" & i + 4).Borders.LineStyle = 1
+    Rs.Close
+    xlApp.Visible = True
+End Sub
+Private Sub Combo0_AfterUpdate()
+    Combo17.Requery
+    Combo17.Value = Null
+End Sub
+Private Sub Combo17_GotFocus()
+    Combo17.Requery
+End Sub
+Private Sub Command9_Click()
+    If (Not Trim(Me.txt_jzbh) = "") Then
+        qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityNotResi.*, T_BD_xq_dw_CityNotResi.dwmc as dwmcstr "
+        qdsql = qdsql + " FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityNotResi ON T_BD_sq.ID = T_BD_BuildInfo_CityNotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_BD_BuildInfo_CityNotResi.dwmc "
+        qdsql = qdsql + " WHERE T_BD_BuildInfo_CityNotResi.jzbh= '" + Trim(Me.txt_jzbh) + "'"
+    Else
+        qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityNotResi.*, T_BD_xq_dw_CityNotResi.dwmc as dwmcstr "
+        qdsql = qdsql + " FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityNotResi ON T_BD_sq.ID = T_BD_BuildInfo_CityNotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_BD_BuildInfo_CityNotResi.dwmc "
+        qdsql = qdsql + "WHERE 1=1 and 2=2 "
+         
+         '按社区、小区查询
+        If (Not IsNull(Me.Combo0.Value)) Then
+            If (IsNull(Me.Combo17.Value)) Then
+                qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.sqid = " + Me.Combo0.Value + ") "
+            Else
+                qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.sqid = " + Me.Combo0.Value
+                qdsql = qdsql + "  AND  T_BD_BuildInfo_CityNotResi.dwmc = " + Combo17.Value + ") "
+            End If
+        End If
+        '按建造时间查询
+        If (Not Trim(Me.txt_year1) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.jzsj >= " + Trim(Me.txt_year1) + ") "
+        If (Not Trim(Me.txt_year2) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.jzsj <= " + Trim(Me.txt_year2) + ") "
+         '按建筑地址查询
+        If (Not Trim(Me.txt_address_sheng) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.address_sheng like '*" + Trim(Me.txt_address_sheng) + "*') "
+        '按城建备注查询
+        If (Not Trim(Me.txt_cjbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.cjbz like '*" + Trim(Me.txt_cjbz) + "*') "
+        '按安监备注查询
+        If (Not Trim(Me.txt_ajbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.ajbz like '*" + Trim(Me.txt_ajbz) + "*') "
+        '按社区备注查询
+        If (Not Trim(Me.txt_sqbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityNotResi.sqbz like '*" + Trim(Me.txt_sqbz) + "*') "
+        '按结构类型查询
+        If (jglx_jtjg.Value = -1 Or jtjg_dbkj.Value = -1 Or jtjg_nkj.Value = -1 Or jtjg_qtjgqt.Value = -1 Or jtjg_gjhnt.Value = -1 Or jtjg_dkkj.Value = -1 Or jtjg_fdkkj.Value = -1 Or jtjg_gjg.Value = -1 Or jtjg_mjg.Value = -1 Or jtjg_qt.Value = -1 Or (Not Trim(Me.jglx_txt) = "")) Then
+            qdsql = qdsql + " and (1=0 "
+            If (jglx_jtjg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jglx_jtjg = -1 "
+            If (jtjg_dbkj.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_dbkj = -1 "
+            If (jtjg_nkj.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_nkj = -1 "
+            If (jtjg_qtjgqt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_qtjgqt = -1 "
+            If (jtjg_gjhnt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_gjhnt = -1 "
+            If (jtjg_dkkj.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_dkkj = -1 "
+            If (jtjg_fdkkj.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_fdkkj = -1 "
+            If (jtjg_gjg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_gjg = -1 "
+            If (jtjg_mjg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_mjg = -1 "
+            If (jtjg_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jtjg_qt = -1 "
+            If (Not Trim(Me.jglx_txt) = "") Then qdsql = qdsql + " or (T_BD_BuildInfo_CityNotResi.jglx_txt like ' * " + Trim(Me.jglx_txt) + " * ') "
+           qdsql = qdsql + " )"
+        End If
+        '按建筑用途查询
+        If (jzyt_zxx.Value = -1 Or jzyt_qtxx.Value = -1 Or jzyt_yljz.Value = -1 Or jzyt_fly.Value = -1 Or jzyt_yl.Value = -1 Or jzyt_bgjz.Value = -1 Or jzyt_bgjz_kysyl.Value = -1 Or jzyt_bgjz_qt.Value = -1 Or jzyt_jk.Value = -1 Or jzyt_syjz.Value = -1 Or jzyt_syjz_jryh.Value = -1 Or jzyt_syjz_scjz.Value = -1 Or jzyt_syjz_jdlgjz.Value = -1 Or jzyt_syjz_cyjz.Value = -1 Or jzyt_cyjz_qt.Value = -1 Or jzyt_whjz.Value = -1 Or jzyt_whjz_jydyy.Value = -1 Or jzyt_whjz_tsg.Value = -1 Or jzyt_whjz_bwg.Value = -1 Or jzyt_whjz_dag.Value = -1 Or jzyt_whjz_qt.Value = -1 Or jzyt_tyjz.Value = -1 Or jzyt_txdl.Value = -1 Or jzyt_jnjz.Value = -1 Or jzyt_zjjz.Value = -1 Or jzyt_zhjz.Value = -1 Or jzyt_zhjz_zz.Value = -1 Or jzyt_zhjz_bg.Value = -1 Or jzyt_zhjz_qt.Value = -1 Or jzyt_gyjz.Value = -1 Or jzyt_ccjz.Value = -1 Or jzyt_qt.Value = -1) Then
+            qdsql = qdsql + " and (1=0 "
+            If (jzyt_zxx.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zxx = -1 "
+            If (jzyt_qtxx.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_qtxx = -1 "
+            If (jzyt_yljz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_yljz = -1 "
+            If (jzyt_fly.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_fly = -1 "
+            If (jzyt_yl.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_yl = -1 "
+            If (jzyt_bgjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_bgjz = -1 "
+            If (jzyt_bgjz_kysyl.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_bgjz_kysyl = -1 "
+            If (jzyt_bgjz_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_bgjz_qt = -1 "
+            If (jzyt_jk.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_jk = -1 "
+            If (jzyt_syjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_syjz = -1 "
+            If (jzyt_syjz_jryh.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_syjz_jryh = -1 "
+            If (jzyt_syjz_scjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_syjz_scjz = -1 "
+            If (jzyt_syjz_jdlgjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_syjz_jdlgjz = -1 "
+            If (jzyt_syjz_cyjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_syjz_cyjz = -1 "
+            If (jzyt_cyjz_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_cyjz_qt = -1 "
+            If (jzyt_whjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz = -1 "
+            If (jzyt_whjz_jydyy.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz_jydyy = -1 "
+            If (jzyt_whjz_tsg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz_tsg = -1 "
+            If (jzyt_whjz_bwg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz_bwg = -1 "
+            If (jzyt_whjz_dag.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz_dag = -1 "
+            If (jzyt_whjz_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_whjz_qt = -1 "
+            If (jzyt_tyjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_tyjz = -1 "
+            If (jzyt_txdl.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_txdl = -1 "
+            If (jzyt_jnjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_jnjz = -1 "
+            If (jzyt_zjjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zjjz = -1 "
+            If (jzyt_zhjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zhjz = -1 "
+            If (jzyt_zhjz_zz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zhjz_zz = -1 "
+            If (jzyt_zhjz_bg.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zhjz_bg = -1 "
+            If (jzyt_zhjz_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_zhjz_qt = -1 "
+            If (jzyt_gyjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_gyjz = -1 "
+            If (jzyt_ccjz.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_ccjz = -1 "
+            If (jzyt_qt.Value = -1) Then qdsql = qdsql + " or T_BD_BuildInfo_CityNotResi.jzyt_qt = -1 "
+            qdsql = qdsql + " )"
+        End If
+    End If
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_CityNotResi.id"
+    Me.Q_CityNotResi_by_sq_xq_sub.Form.RecordSource = qdsql
+    Me.Q_CityNotResi_by_sq_xq_sub.Requery
+    sql_eara = "SELECT count(T_BD_BuildInfo_CityNotResi.id)as count_id,Sum(T_BD_BuildInfo_CityNotResi.eara) as eara_all,Sum(T_BD_BuildInfo_CityNotResi.eara_up)as eara_up,Sum(T_BD_BuildInfo_CityNotResi.eara_below) as eara_below FROM (" + qdsql + ")"
+    Dim Rs 'As dao.Recordset
+    Set Rs = CurrentDb.OpenRecordset(sql_eara)
+    Lab_eara.Caption = Format((Rs!eara_all), ".00")
+    Lab_eara_up.Caption = Format((Rs!eara_up), ".00")
+    Lab_eara_below.Caption = Format((Rs!eara_below), ".00")
+    count_id.Caption = Rs!count_id
+End Sub
+Private Sub Form_Current()
+    Combo0.Value = Null
+    Combo17.Value = Null
+    txt_year1 = ""
+    txt_year1 = ""
+    jglx_jtjg.Value = 0
+    jtjg_dbkj.Value = 0
+    jtjg_nkj.Value = 0
+    jtjg_qtjgqt.Value = 0
+    jtjg_gjhnt.Value = 0
+    jtjg_dkkj.Value = 0
+    jtjg_fdkkj.Value = 0
+    jtjg_gjg.Value = 0
+    jtjg_mjg.Value = 0
+    jtjg_qt.Value = 0
+    jglx_txt = ""
+    jzyt_zxx.Value = 0
+    jzyt_qtxx.Value = 0
+    jzyt_yljz.Value = 0
+    jzyt_fly.Value = 0
+    jzyt_yl.Value = 0
+    jzyt_bgjz.Value = 0
+    jzyt_bgjz_kysyl.Value = 0
+    jzyt_bgjz_qt.Value = 0
+    jzyt_jk.Value = 0
+    jzyt_syjz.Value = 0
+    jzyt_syjz_jryh.Value = 0
+    jzyt_syjz_scjz.Value = 0
+    jzyt_syjz_jdlgjz.Value = 0
+    jzyt_syjz_cyjz.Value = 0
+    jzyt_cyjz_qt.Value = 0
+    jzyt_whjz.Value = 0
+    jzyt_whjz_jydyy.Value = 0
+    jzyt_whjz_tsg.Value = 0
+    jzyt_whjz_bwg.Value = 0
+    jzyt_whjz_dag.Value = 0
+    jzyt_whjz_qt.Value = 0
+    jzyt_tyjz.Value = 0
+    jzyt_txdl.Value = 0
+    jzyt_jnjz.Value = 0
+    jzyt_zjjz.Value = 0
+    jzyt_zhjz.Value = 0
+    jzyt_zhjz_zz.Value = 0
+    jzyt_zhjz_bg.Value = 0
+    jzyt_zhjz_qt.Value = 0
+    jzyt_gyjz.Value = 0
+    jzyt_ccjz.Value = 0
+    jzyt_qt.Value = 0
+    jzyt_txt = ""
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityNotResi.*,T_BD_xq_dw_CityNotResi.dwmc as dwmcstr "
+    qdsql = qdsql + "FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityNotResi ON T_BD_sq.ID = T_BD_BuildInfo_CityNotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_BD_BuildInfo_CityNotResi.dwmc "
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_CityNotResi.id"
+    Call Command9_Click
+End Sub
+Private Sub Form_Open(Cancel As Integer)
+DoCmd.Maximize
+End Sub
+' Q_CityNotResi_by_sq_xq_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityNotResi.*,T_BD_xq_dw_CityNotResi.dwmc as dwmcstr "
+    qdsql = qdsql + "FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityNotResi ON T_BD_sq.ID = T_BD_BuildInfo_CityNotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_BD_BuildInfo_CityNotResi.dwmc "
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_CityNotResi.id"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_T_BD_BuildInfo_CityNotResi"
+End Sub
+Private Sub jzdz_Click()
+can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_T_BD_BuildInfo_CityNotResi"
+End Sub
+' Q_CityResi_by_sq__xq
+Option Compare Database
+Dim qdsql As String
+Private Sub Com_export_Click()
+    Dim Rs
+    Dim xlApp As Object     'Excel.Application
+    Dim xlBook As Object    'Excel.Workbook
+    Dim xlSheet As Object   'Excel.Worksheet
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlBook = xlApp.Workbooks.Add    '添加一个新的Book
+    Set xlSheet = xlApp.ActiveSheet     '使用当前的Sheet
+    Dim i As Long
+    Set Rs = CurrentDb.OpenRecordset(qdsql)
+    Dim sr As Integer
+    xlSheet.rows(1).RowHeight = 18
+    xlSheet.rows(2).RowHeight = 21
+    xlSheet.rows(3).RowHeight = 24
+    xlSheet.rows(4).RowHeight = 36
+    xlSheet.range("a1:am4").HorizontalAlignment = -4108  '居中
+    xlSheet.range("a1:am4").Font.Bold = True '字体加粗
+    xlSheet.range("a1:a4").merge     'A1：A4 合并单元格
+    xlSheet.cells(1, 1) = "城镇" & Chr(10) & "住宅" & Chr(10) & "建筑"   'A1中输入文字  ，其中& Chr(10) & 表示换行
+    xlSheet.range("b1:m1").merge   'b1：m1 合并单元格
+    xlSheet.cells(1, 2) = "第一部分：基本信息"  'B1中输入文字   cells(1,2)即第一行第二列，也就是B1单元格
+    xlSheet.range("b1:m4").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.range("n1:ab1").merge
+    xlSheet.cells(1, 14) = "第二部分：建筑信息"
+    xlSheet.range("n1:ab4").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.cells(1, 29) = "第三部分：抗震设防基本信息"
+    xlSheet.cells(1, 29).Interior.Color = RGB(216, 216, 216) '背景的颜色 灰色
+    xlSheet.cells(2, 29).Interior.Color = RGB(216, 216, 216) '背景的颜色 灰色
+    xlSheet.range("ad1:ai1").merge
+    xlSheet.cells(1, 30) = "第四部分：使用情况"
+    xlSheet.range("ad1:ai4").Interior.Color = RGB(219, 238, 243) '背景的颜色 蓝灰色
+    xlSheet.range("aj1:am1").merge
+    xlSheet.cells(1, 36) = "调查人信息（必填）"
+    xlSheet.range("aj1:am4").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("b2:b4").merge
+    xlSheet.Columns(2).ColumnWidth = 12
+    xlSheet.cells(2, 2) = "小区名称"
+    xlSheet.range("c2:c4").merge
+    xlSheet.Columns(3).ColumnWidth = 12
+    xlSheet.cells(2, 3) = "所属社区名称"
+    xlSheet.range("d2:d4").merge
+    xlSheet.cells(2, 4) = "是否产权登记" & Chr(10) & "（是/否）"
+    xlSheet.range("e2:e4").merge
+    xlSheet.cells(2, 5) = "产权类别" & Chr(10) & "（可多选：A业主共有、B央产、C市属单位、D区属单位、E镇属单位、F区属直管公房、G企业产权、H私有产权、I外市单位、J涉外产权、K军产、L厂矿工业用房）"
+    xlSheet.range("f2:f4").merge
+    xlSheet.Columns(6).ColumnWidth = 20
+    xlSheet.cells(2, 6) = "产权单位"
+    xlSheet.range("g2:g4").merge
+    xlSheet.cells(2, 7) = "套数"
+    xlSheet.range("h2:h4").merge
+    xlSheet.Columns(8).ColumnWidth = 60
+    xlSheet.cells(2, 8) = "建筑地址"
+    xlSheet.range("i2:m2").merge
+    xlSheet.cells(2, 9) = "玻璃幕墙情况"
+    xlSheet.range("i3:i4").merge
+    xlSheet.cells(3, 9) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+    xlSheet.range("j3:j4").merge
+    xlSheet.cells(3, 10) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+    xlSheet.range("k3:k4").merge
+    xlSheet.cells(3, 11) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+    xlSheet.range("l3:l4").merge
+    xlSheet.cells(3, 12) = "竣工时间"
+    xlSheet.range("m3:m4").merge
+    xlSheet.cells(3, 13) = "设计使用年限"
+    xlSheet.range("n2:n4").merge
+    xlSheet.cells(2, 14) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+    xlSheet.range("o2:u2").merge
+    xlSheet.cells(2, 15) = "建筑概况"
+    xlSheet.range("o3:p3").merge
+    xlSheet.cells(3, 15) = "建筑层数"
+    xlSheet.cells(4, 15) = "地下层数"
+    xlSheet.cells(4, 16) = "地上层数"
+    xlSheet.range("q3:q4").merge
+    xlSheet.cells(3, 17) = "建筑高度" & Chr(10) & "米"
+    xlSheet.range("r3:t3").merge
+    xlSheet.cells(3, 18) = "建筑面积（平方米）"
+    xlSheet.cells(4, 18) = "总建筑面积"
+    xlSheet.cells(4, 19) = "地上" & Chr(10) & "建筑面积"
+    xlSheet.cells(4, 20) = "地下" & Chr(10) & "建筑面积"
+    xlSheet.range("u3:u4").merge
+    xlSheet.cells(3, 21) = "建造时间" & Chr(10) & "（____年）"
+    xlSheet.range("v2:v4").merge
+    xlSheet.cells(2, 22) = "结构类型" & Chr(10) & "A砌体结构（①底部框架-抗震墙结构砌体结构 ②其他）" & Chr(10) & "B钢筋混凝土结构 C钢结构    D木结构 E其他__"
+    xlSheet.range("w2:w4").merge
+    xlSheet.cells(2, 23) = "是否采用减隔震" & Chr(10) & "A减震  B隔震" & Chr(10) & "C未采用 D减震、隔震"
+    xlSheet.range("x2:x4").merge
+    xlSheet.cells(2, 24) = "是否保护性建筑" & Chr(10) & "A否 B全国重点文物保护建筑  C省级文物保护建筑 D市县级文物保护建筑 E历史建筑"
+    xlSheet.range("y2:y4").merge
+    xlSheet.cells(2, 25) = "是否专业设计" & Chr(10) & "建造" & Chr(10) & "（是/否）"
+    xlSheet.range("z2:z4").merge
+    xlSheet.cells(2, 26) = "是否有连廊" & Chr(10) & "（是/否）"
+    xlSheet.range("aa2:aa4").merge
+    xlSheet.cells(2, 27) = "是否为简易楼" & Chr(10) & "（是/否）"
+    xlSheet.range("ab2:ab4").merge
+    xlSheet.cells(2, 28) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+    xlSheet.range("ac2:ac4").merge
+    xlSheet.cells(2, 29) = "（该部分内容通过软件后台填写）"
+    xlSheet.range("ad2:ad4").merge
+    xlSheet.cells(2, 30) = "变形损伤" & Chr(10) & "（有无明显裂缝、倾斜、变形）" & Chr(10) & "（有/无）"
+    xlSheet.range("ae2:af2").merge
+    xlSheet.cells(2, 31) = "改造情况"
+    xlSheet.range("ae3:ae4").merge
+    xlSheet.cells(3, 31) = "是否进行过改造" & Chr(10) & "（是/否）"
+    xlSheet.range("af3:af4").merge
+    xlSheet.cells(3, 32) = "改造时间" & Chr(10) & "（____年）"
+    xlSheet.range("ag2:ah2").merge
+    xlSheet.cells(2, 31) = "抗震加固"
+    xlSheet.range("ag3:ag4").merge
+    xlSheet.cells(3, 33) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+    xlSheet.range("ah3:ah4").merge
+    xlSheet.cells(3, 34) = "抗震加固时间" & Chr(10) & "（____年）"
+    xlSheet.cells(2, 35) = "物业管理"
+    xlSheet.range("ai3:ai4").merge
+    xlSheet.cells(3, 35) = "有无物业管理" & Chr(10) & "（有/无）"
+    xlSheet.range("aj2:aj4").merge
+    xlSheet.cells(2, 36) = "姓名"
+    xlSheet.range("ak2:ak4").merge
+    xlSheet.Columns(37).ColumnWidth = 12
+    xlSheet.cells(2, 37) = "联系电话"
+    xlSheet.range("al2:al4").merge
+    xlSheet.Columns(38).ColumnWidth = 25
+    xlSheet.cells(2, 38) = "单位"
+    xlSheet.range("am2:am4").merge
+    xlSheet.Columns(39).ColumnWidth = 12
+    xlSheet.cells(2, 39) = "调查日期"
+    sr = 5
+    Do While Not Rs.EOF
+        'xlSheet.Cells(sr, 1) = "建筑编号"
+        xlSheet.cells(sr + i, 1) = Rs("jzbh")
+        'xlSheet.Cells(sr, 2) = "小区名称"
+        xlSheet.cells(sr + i, 2) = Rs("xqmc")
+        'xlSheet.Cells(sr, 3) = "所属社区名称"
+        xlSheet.cells(sr + i, 3) = Rs("sqmc")
+        'xlSheet.Cells(sr, 4) = "是否产权登记" & Chr(10) & "（是/否）"
+        If (Rs("is_cqdj") = "TRUE") Then xlSheet.cells(sr + i, 4) = "是"
+        If (Rs("is_cqdj") = "FALSE") Then xlSheet.cells(sr + i, 4) = "否"
+        'xlSheet.Cells(sr, 5) = "产权类别" & Chr(10) & "（可多选：A业主共有、B央产、C市属单位、D区属单位、E镇属单位、F区属直管公房、G企业产权、H私有产权、I外市单位、J涉外产权、K军产、L厂矿工业用房）"
+        Dim cqlbstr As String
+        cqlbstr = ""
+        If (Rs("cq_yzgy") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "A"
+        End If
+        If (Rs("cq_yc") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "B"
+        End If
+        If (Rs("cq_ssdw") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "C"
+        End If
+        If (Rs("cq_qsdw") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "D"
+        End If
+        If (Rs("cq_zsdw") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "E"
+        End If
+        If (Rs("cq_qszggf") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "F"
+        End If
+        If (Rs("cq_yqcq") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "G"
+        End If
+        If (Rs("cq_sycq") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "H"
+        End If
+        If (Rs("cq_wsdw") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "I"
+        End If
+        If (Rs("cq_swcq") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "J"
+        End If
+        If (Rs("cq_jc") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "K"
+        End If
+         If (Rs("cq_ckgyyf") = "TRUE") Then
+            If Not (Trim(cqlbstr) = "") Then cqlbstr = cqlbstr + "、"
+            cqlbstr = cqlbstr + "L"
+        End If
+            xlSheet.cells(sr + i, 5) = cqlbstr
+        'xlSheet.Cells(sr, 6) = "产权单位"
+        xlSheet.cells(sr + i, 6) = Rs("cqdw")
+        'xlSheet.Cells(sr, 7) = "套数"
+        xlSheet.cells(sr + i, 7) = Rs("number")
+        'xlSheet.Cells(sr, 8) = "建筑地址"
+        xlSheet.cells(sr + i, 8) = Rs("address_sheng")
+        
+        'xlSheet.Cells(sr, 9) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+        If (Rs("blmq_is") = "TRUE") Then xlSheet.cells(sr + i, 9) = "有"
+        If (Rs("blmq_is") = "FALSE") Then xlSheet.cells(sr + i, 9) = "无"
+        'xlSheet.Cells(sr, 10) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+        If Not (IsNull(Rs("blmq_lx"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 10) = "A"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 10) = "B"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 10) = "C"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 10) = "D"
+        End If
+        'xlSheet.Cells(sr, 11) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+        xlSheet.cells(sr + i, 11) = Rs("blmq_mj")
+        'xlSheet.Cells(sr, 12) = "竣工时间"
+        xlSheet.cells(sr + i, 12) = Rs("jgsj")
+        xlSheet.cells(sr + i, 12) = Format(xlSheet.cells(sr + i, 12), "yyyy/mm/dd")
+        'xlSheet.Cells(sr, 13) = "设计使用年限"
+        xlSheet.cells(sr + i, 13) = Rs("sjsynx")
+        'xlSheet.Cells(sr, 14) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+        If Not (IsNull(Rs("jzwlb"))) Then
+            If Rs("jzwlb") = "1" Then xlSheet.cells(sr + i, 14) = "楼房"
+            If Rs("jzwlb") = "2" Then xlSheet.cells(sr + i, 14) = "平房"
+        End If
+        'xlSheet.Cells(sr, 15) = "地下层数"
+        xlSheet.cells(sr + i, 15) = Rs("cs_below")
+        'xlSheet.Cells(sr, 16) = "地上层数"
+        xlSheet.cells(sr + i, 16) = Rs("cs_up")
+        'xlSheet.Cells(sr, 17) = "建筑高度" & Chr(10) & "米"
+        xlSheet.cells(sr + i, 17) = Rs("height")
+        'xlSheet.Cells(sr, 18) = "总建筑面积"
+        xlSheet.cells(sr + i, 18) = Rs("eara")
+        'xlSheet.Cells(sr, 19) = "地上" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 19) = Rs("eara_up")
+        'xlSheet.Cells(sr, 20) = "地下" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 20) = Rs("eara_below")
+        'xlSheet.Cells(sr, 21) = "建造时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 21) = Rs("jzsj")
+        'xlSheet.Cells(sr, 22) = "结构类型" & Chr(10) & "A砌体结构（①底部框架-抗震墙结构砌体结构 ②其他）" & Chr(10) & "B钢筋混凝土结构 C钢结构    D木结构 E其他__"
+        Dim jglxstr As String
+        jglxstr = ""
+        If Not (IsNull(Rs("jglx"))) Then
+            If Rs("jglx") = "1" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "A①"
+            End If
+            If Rs("jglx") = "2" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "A②"
+            End If
+            If Rs("jglx") = "3" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "B"
+            End If
+            If Rs("jglx") = "4" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "C"
+            End If
+            If Rs("jglx") = "5" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "D"
+            End If
+            If Rs("jglx") = "6" Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + "E"
+            End If
+            
+            If Not (IsNull(Rs("jglx_txt"))) Then
+                If Not (Trim(jglxstr) = "") Then glxstr = jglxstr + "、"
+                glxstr = jglxstr + Rs("jglx_txt")
+            End If
+            xlSheet.cells(sr + i, 22) = glxstr
+        End If
+        'xlSheet.Cells(sr, 23) = "是否采用减隔震" & Chr(10) & "A减震  B隔震" & Chr(10) & "C未采用 D减震、隔震"
+         If Not (IsNull(Rs("jgz"))) Then
+            If Rs("jgz") = "1" Then xlSheet.cells(sr + i, 23) = "A"
+            If Rs("jgz") = "2" Then xlSheet.cells(sr + i, 23) = "B"
+            If Rs("jgz") = "3" Then xlSheet.cells(sr + i, 23) = "C"
+            If Rs("jgz") = "4" Then xlSheet.cells(sr + i, 23) = "D"
+        End If
+        'xlSheet.Cells(sr, 24) = "是否保护性建筑" & Chr(10) & "A否 B全国重点文物保护建筑  C省级文物保护建筑 D市县级文物保护建筑 E历史建筑"
+        If Not (IsNull(Rs("bhjz"))) Then
+            If Rs("bhjz") = "1" Then xlSheet.cells(sr + i, 24) = "A"
+            If Rs("bhjz") = "2" Then xlSheet.cells(sr + i, 24) = "B"
+            If Rs("bhjz") = "3" Then xlSheet.cells(sr + i, 24) = "C"
+            If Rs("bhjz") = "4" Then xlSheet.cells(sr + i, 24) = "D"
+            If Rs("bhjz") = "5" Then xlSheet.cells(sr + i, 24) = "E"
+        End If
+        'xlSheet.Cells(sr, 25) = "是否专业设计" & Chr(10) & "建造" & Chr(10) & "（是/否）"
+        If (Rs("is_zysjjz") = "TRUE") Then xlSheet.cells(sr + i, 25) = "是"
+        If (Rs("is_zysjjz") = "FALSE") Then xlSheet.cells(sr + i, 25) = "否"
+        'xlSheet.Cells(sr, 26) = "是否有连廊" & Chr(10) & "（是/否）"
+        If (Rs("is_ll") = "TRUE") Then xlSheet.cells(sr + i, 26) = "是"
+        If (Rs("is_ll") = "FALSE") Then xlSheet.cells(sr + i, 26) = "否"
+        'xlSheet.Cells(sr, 27) = "是否为简易楼" & Chr(10) & "（是/否）"
+        If (Rs("is_jyl") = "TRUE") Then xlSheet.cells(sr + i, 27) = "是"
+        If (Rs("is_jyl") = "FALSE") Then xlSheet.cells(sr + i, 27) = "否"
+        'xlSheet.Cells(sr, 28) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+        If (Rs("is_mjgwg") = "TRUE") Then xlSheet.cells(sr + i, 28) = "是"
+        If (Rs("is_mjgwg") = "FALSE") Then xlSheet.cells(sr + i, 28) = "否"
+        'xlSheet.Cells(sr, 29) = "（该部分内容通过软件后台填写）"
+        'xlSheet.Cells(sr, 30) = "变形损伤" & Chr(10) & "（有无明显裂缝、倾斜、变形）" & Chr(10) & "（有/无）"
+        If (Rs("bxss") = "TRUE") Then xlSheet.cells(sr + i, 30) = "有"
+        If (Rs("bxss") = "FALSE") Then xlSheet.cells(sr + i, 30) = "无"
+        'xlSheet.Cells(sr, 31) = "是否进行过改造" & Chr(10) & "（是/否）"
+        If (Rs("is_gz") = "TRUE") Then xlSheet.cells(sr + i, 31) = "是"
+        If (Rs("is_gz") = "FALSE") Then xlSheet.cells(sr + i, 31) = "否"
+        'xlSheet.Cells(sr, 32) = "改造时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 32) = Rs("gzsj")
+        'xlSheet.Cells(sr, 33) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+        If (Rs("is_kzjg") = "TRUE") Then xlSheet.cells(sr + i, 33) = "是"
+        If (Rs("is_kzjg") = "FALSE") Then xlSheet.cells(sr + i, 33) = "否"
+        'xlSheet.Cells(sr, 34) = "抗震加固时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 34) = Rs("jgtime")
+        'xlSheet.Cells(sr, 35) = "有无物业管理" & Chr(10) & "（有/无）"
+        xlSheet.cells(sr + i, 35) = Rs("blmq_mj")
+        If (Rs("is_wygl") = "TRUE") Then xlSheet.cells(sr + i, 35) = "有"
+        If (Rs("is_wygl") = "FALSE") Then xlSheet.cells(sr + i, 35) = "无"
+        'xlSheet.Cells(sr, 36) = "姓名"
+        xlSheet.cells(sr + i, 36) = Rs("xxcjr")
+        'xlSheet.Cells(sr, 37) = "联系电话"
+        xlSheet.cells(sr + i, 37) = Rs("telephone")
+        'xlSheet.Cells(sr, 38) = "单位"
+        xlSheet.cells(sr + i, 38) = Rs("dw")
+        'xlSheet.Cells(sr, 39) = "调查日期"
+        xlSheet.cells(sr + i, 39) = Rs("dcrq")
+        xlSheet.cells(sr + i, 39) = Format(xlSheet.cells(sr + i, 39), "yyyy/mm/dd")
+        Rs.MoveNext
+        i = i + 1
+    Loop
+    xlSheet.range("a1:am" & i + 4).Borders.LineStyle = 1
+    Rs.Close
+    xlApp.Visible = True
+End Sub
+Private Sub Combo0_AfterUpdate()
+    Combo17.Requery
+    Combo17.Value = Null
+End Sub
+Private Sub Combo17_GotFocus()
+    Combo17.Requery
+End Sub
+Private Sub Command38_Click()
+Label37.Caption = jglx.Value
+End Sub
+Private Sub Command9_Click()
+    If (Not Trim(Me.txt_jzbh) = "") Then
+        qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityResi.*, T_BD_xq_dw_CityResi.xqmc"
+        qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityResi ON T_BD_sq.ID = T_BD_BuildInfo_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_BD_BuildInfo_CityResi.xqid "
+        qdsql = qdsql + " WHERE T_BD_BuildInfo_CityResi.jzbh= '" + Trim(Me.txt_jzbh) + "'"
+    Else
+        qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityResi.*, T_BD_xq_dw_CityResi.xqmc"
+        qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityResi ON T_BD_sq.ID = T_BD_BuildInfo_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_BD_BuildInfo_CityResi.xqid "
+        qdsql = qdsql + " WHERE 1=1 and 2=2 "
+        If (Not IsNull(Me.Combo0.Value)) Then
+            If (IsNull(Me.Combo17.Value)) Then
+                qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.sqid = " + Me.Combo0.Value + ") "
+            Else
+                qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.sqid = " + Me.Combo0.Value
+                qdsql = qdsql + "  AND  T_BD_BuildInfo_CityResi.xqid = " + Combo17.Value + ") "
+            End If
+        End If
+        If (Not Trim(Me.txt_year1) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.jzsj >= " + Trim(Me.txt_year1) + ") "
+        If (Not Trim(Me.txt_year2) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.jzsj <= " + Trim(Me.txt_year2) + ") "
+        If (Not Trim(Me.txt_jzmc) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.jzmc like '*" + Trim(Me.txt_jzmc) + "*') "
+        If (Not Trim(Me.txt_cjbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.cjbz like '*" + Trim(Me.txt_cjbz) + "*') "
+        If (Not Trim(Me.txt_ajbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.ajbz like '*" + Trim(Me.txt_ajbz) + "*') "
+        If (Not Trim(Me.txt_sqbz) = "") Then qdsql = qdsql + " and (T_BD_BuildInfo_CityResi.sqbz like '*" + Trim(Me.txt_sqbz) + "*') "
+        If (Not IsNull(Me.jglx.Value)) Then
+            qdsql = qdsql + " and (1=0 "
+            qdsql = qdsql + " or T_BD_BuildInfo_CityResi.jglx= " + Str(jglx.Value) + " "
+    
+            If (Not Trim(Me.jglx_txt) = "") Then qdsql = qdsql + " or (T_BD_BuildInfo_CityResi.jglx_txt like ' * " + Trim(Me.jglx_txt) + " * ') "
+            qdsql = qdsql + " )"
+        End If
+    End If
+    qdsql = qdsql + " ORDER BY T_BD_xq_dw_CityResi.xqmc"
+    Me.Q_CityResi_by_sq_sub.Form.RecordSource = qdsql
+    Me.Q_CityResi_by_sq_sub.Requery
+    sql_eara = "SELECT count(T_BD_BuildInfo_CityResi.id)as count_id,Sum(T_BD_BuildInfo_CityResi.eara)as eara_all,Sum(T_BD_BuildInfo_CityResi.eara_up)as eara_up,Sum(T_BD_BuildInfo_CityResi.eara_below) as eara_below,Sum(T_BD_BuildInfo_CityResi.number)as number_all FROM (" + qdsql + ")"
+    Dim Rs 'As dao.Recordset
+    Set Rs = CurrentDb.OpenRecordset(sql_eara)
+    Lab_eara.Caption = Format((Rs!eara_all), ".00")
+    Lab_eara_up.Caption = Format((Rs!eara_up), ".00")
+    Lab_eara_below.Caption = Format((Rs!eara_below), ".00")
+    Lab_number.Caption = Format((Rs!number_all))
+    count_id.Caption = Rs!count_id
+End Sub
+Private Sub Form_Current()
+    Combo0.Value = Null
+    Combo17.Value = Null
+    txt_year1 = ""
+    txt_year1 = ""
+    jglx_txt = ""
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityResi.*, T_BD_xq_dw_CityResi.xqmc"
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityResi ON T_BD_sq.ID = T_BD_BuildInfo_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_BD_BuildInfo_CityResi.xqid "
+    qdsql = qdsql + " ORDER BY T_BD_xq_dw_CityResi.id"
+    Call Command9_Click
+End Sub
+' Q_CityResi_by_sq_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_BuildInfo_CityResi.*, T_BD_xq_dw_CityResi.xqmc "
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_BD_BuildInfo_CityResi ON T_BD_sq.ID = T_BD_BuildInfo_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_BD_BuildInfo_CityResi.xqid "
+    qdsql = qdsql + " ORDER BY T_BD_xq_dw_CityResi.xqmc"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_T_BD_BuildInfo_CityResi"
+End Sub
+' Q_EC_NotResi_by_sq__xq
+Option Compare Database
+Private Sub Combo0_AfterUpdate()
+    Combo17.Requery
+    Combo17.Value = Null
+End Sub
+Private Sub Combo17_GotFocus()
+    Combo17.Requery
+End Sub
+Private Sub Command9_Click()
+    Dim qdsql As String
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_xq_dw_CityNotResi.dwmc, T_EC_NotResi.nd, T_EC_NotResi.ID, T_EC_NotResi.xqmc, T_EC_NotResi.sqid"
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_EC_NotResi ON T_BD_sq.ID = T_EC_NotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_EC_NotResi.xqmc"
+    qdsql = qdsql + " WHERE 1=1 and 2=2 "
+    If (Not IsNull(Me.Combo0.Value)) Then
+        If (IsNull(Me.Combo17.Value)) Then
+            qdsql = qdsql + " and (T_EC_NotResi.sqid = " + Me.Combo0.Value + ") "
+        Else
+            qdsql = qdsql + " and (T_EC_NotResi.sqid = " + Me.Combo0.Value
+            qdsql = qdsql + "  AND  T_EC_NotResi.xqmc = " + Combo17.Value + ") "
+        End If
+    End If
+    If (Not Trim(Me.txt_year1) = "") Then qdsql = qdsql + " and (T_EC_NotResi.nd >= " + Trim(Me.txt_year1) + ") "
+    If (Not Trim(Me.txt_year2) = "") Then qdsql = qdsql + " and (T_EC_NotResi.nd <= " + Trim(Me.txt_year2) + ") "
+    qdsql = qdsql + " ORDER BY T_BD_sq.sqmc, T_EC_NotResi.nd DESC"
+    Me.Q_CityResi_by_sq_sub.Form.RecordSource = qdsql
+    Me.Q_CityResi_by_sq_sub.Requery
+End Sub
+' Q_EC_NotResi_by_sq_sub
+Option Compare Database
+Private Sub Form_Load()
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_xq_dw_CityNotResi.dwmc, T_EC_NotResi.nd, T_EC_NotResi.ID, T_EC_NotResi.xqmc, T_EC_NotResi.sqid"
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityNotResi INNER JOIN (T_BD_sq INNER JOIN T_EC_NotResi ON T_BD_sq.ID = T_EC_NotResi.sqid) ON T_BD_xq_dw_CityNotResi.ID = T_EC_NotResi.xqmc"
+    qdsql = qdsql + " ORDER BY T_BD_sq.sqmc, T_EC_NotResi.nd DESC;"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_T_EC_NotResi"
+End Sub
+' Q_EC_Resi_by_sq__xq
+Option Compare Database
+Private Sub Combo0_AfterUpdate()
+    Combo17.Requery
+    Combo17.Value = Null
+End Sub
+Private Sub Combo17_GotFocus()
+    Combo17.Requery
+End Sub
+Private Sub Command9_Click()
+    Dim qdsql As String
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_xq_dw_CityResi.xqmc, T_EC_CityResi.nd, T_EC_CityResi.ID, T_EC_CityResi.sqid"
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_EC_CityResi ON T_BD_sq.ID = T_EC_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_EC_CityResi.xqmc"
+    qdsql = qdsql + " WHERE 1=1 and 2=2 "
+    If (Not IsNull(Me.Combo0.Value)) Then
+        If (IsNull(Me.Combo17.Value)) Then
+            qdsql = qdsql + " and (T_EC_CityResi.sqid = " + Me.Combo0.Value + ") "
+        Else
+            qdsql = qdsql + " and (T_EC_CityResi.sqid = " + Me.Combo0.Value
+            qdsql = qdsql + "  AND  T_EC_CityResi.xqmc = " + Combo17.Value + ") "
+        End If
+    End If
+    If (Not Trim(Me.txt_year1) = "") Then qdsql = qdsql + " and (T_EC_CityResi.nd >= " + Trim(Me.txt_year1) + ") "
+    If (Not Trim(Me.txt_year2) = "") Then qdsql = qdsql + " and (T_EC_CityResi.nd <= " + Trim(Me.txt_year2) + ") "
+      qdsql = qdsql + " ORDER BY T_BD_sq.sqmc, T_EC_CityResi.nd DESC;"
+    Me.Q_CityResi_by_sq_sub.Form.RecordSource = qdsql
+    Me.Q_CityResi_by_sq_sub.Requery
+End Sub
+' Q_EC_Resi_by_sq_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+    qdsql = "SELECT T_BD_sq.sqmc, T_BD_xq_dw_CityResi.xqmc, T_EC_CityResi.nd, T_EC_CityResi.ID, T_EC_CityResi.sqid"
+    qdsql = qdsql + " FROM T_BD_xq_dw_CityResi INNER JOIN (T_BD_sq INNER JOIN T_EC_CityResi ON T_BD_sq.ID = T_EC_CityResi.sqid) ON T_BD_xq_dw_CityResi.ID = T_EC_CityResi.xqmc"
+    qdsql = qdsql + " ORDER BY T_BD_sq.sqmc, T_EC_CityResi.nd DESC;"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_T_EC_Resi"
+End Sub
+' Q_RuralNotResi
+Option Compare Database
+Dim qdsql As String
+Private Sub Com_export_Click()
+    Dim Rs 'As dao.Recordset
+    Dim xlApp As Object     'Excel.Application
+    Dim xlBook As Object    'Excel.Workbook
+    Dim xlSheet As Object   'Excel.Worksheet
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlBook = xlApp.Workbooks.Add    '添加一个新的Book
+    Set xlSheet = xlApp.ActiveSheet     '使用当前的Sheet
+    Dim i As Long
+    Set Rs = CurrentDb.OpenRecordset(qdsql)
+    Dim sr As Integer
+    xlSheet.rows(1).RowHeight = 18
+    xlSheet.rows(2).RowHeight = 21
+    xlSheet.rows(3).RowHeight = 24
+    xlSheet.rows(4).RowHeight = 36
+    xlSheet.range("a1:aL4").HorizontalAlignment = -4108  '居中
+    xlSheet.range("a1:aL4").Font.Bold = True '字体加粗
+    xlSheet.range("a1:a4").merge
+    xlSheet.cells(1, 1) = "农村" & Chr(10) & "非住宅" & Chr(10) & "建筑"
+    xlSheet.range("b1:J1").merge
+    xlSheet.cells(1, 2) = "第一部分：基本信息"
+    xlSheet.range("b1:J4").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.range("K1:aa1").merge
+    xlSheet.cells(1, 11) = "第二部分：建筑信息"
+    xlSheet.range("K1:aa4").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.range("ab1:ag1").merge
+    xlSheet.cells(1, 28) = "第三部分：抗震设防信息"
+    xlSheet.range("ab1:ag4").Interior.Color = RGB(219, 238, 243) '背景的颜色 蓝灰色
+    xlSheet.range("ah1:ah4").merge
+    xlSheet.cells(1, 34) = "第四部分：房屋照片" & Chr(10) & "房屋外观、抗震构造措施和变形损伤部位照片"
+    xlSheet.cells(1, 34).Interior.Color = RGB(227, 217, 206) '背景的颜色
+    xlSheet.range("ai1:aL1").merge
+    xlSheet.cells(1, 35) = "调查人信息"
+    xlSheet.range("ai1:aL4").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("b2:b4").merge
+    xlSheet.Columns(2).ColumnWidth = 60
+    xlSheet.cells(2, 2) = "建筑地址"
+    xlSheet.range("c2:c4").merge
+    xlSheet.Columns(3).ColumnWidth = 12
+    xlSheet.cells(2, 3) = "房屋或单位名称"
+    xlSheet.range("d2:d4").merge
+    xlSheet.Columns(4).ColumnWidth = 20
+    xlSheet.cells(2, 4) = "姓名或机构名称"
+    xlSheet.range("e2:e4").merge
+    xlSheet.Columns(5).ColumnWidth = 12
+    xlSheet.cells(2, 5) = "户主类型" & Chr(10) & "（产权人/使用人）"
+    xlSheet.range("e2:e4").merge
+    xlSheet.Columns(5).ColumnWidth = 20
+    xlSheet.cells(2, 5) = "产权单位" & Chr(10) & "（产权人）"
+    xlSheet.range("f2:j2").merge
+    xlSheet.cells(2, 6) = "玻璃幕墙情况"
+    xlSheet.range("f3:f4").merge
+    xlSheet.cells(3, 6) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+    xlSheet.range("g3:g4").merge
+    xlSheet.cells(3, 7) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+    xlSheet.range("h3:h4").merge
+    xlSheet.cells(3, 8) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+    xlSheet.range("i3:i4").merge
+    xlSheet.cells(3, 9) = "竣工时间"
+    xlSheet.range("j3:j4").merge
+    xlSheet.cells(3, 10) = "设计使用年限"
+    xlSheet.range("k2:k4").merge
+    xlSheet.cells(2, 11) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+    xlSheet.range("L2:m2").merge
+    xlSheet.cells(2, 12) = "建筑层数"
+    xlSheet.range("L3:L4").merge
+    xlSheet.cells(3, 12) = "地下层数"
+    xlSheet.range("m3:m4").merge
+    xlSheet.cells(3, 13) = "地上层数"
+    xlSheet.range("n2:p2").merge
+    xlSheet.cells(2, 14) = "建筑面积（平方米）"
+    xlSheet.range("n3:n4").merge
+    xlSheet.cells(3, 14) = "总建筑面积"
+    xlSheet.range("o3:o4").merge
+    xlSheet.cells(3, 15) = "地上" & Chr(10) & "建筑面积"
+    xlSheet.range("p3:p4").merge
+    xlSheet.cells(3, 16) = "地下" & Chr(10) & "建筑面积"
+    xlSheet.range("q2:q4").merge
+    xlSheet.cells(2, 17) = "建造年代" & Chr(10) & "（A 1980 年及以前  B 1981-1990 年" & Chr(10) & "C 1991-2000 年" & Chr(10) & "D 2001-2010 年" & Chr(10) & "E 2011-2015 年" & Chr(10) & "  F 2016 年及以后）"
+    xlSheet.range("R2:R4").merge
+    xlSheet.cells(2, 18) = "结构类型" & Chr(10) & "A砖石结构  B土木结构   C混杂结构   D窑洞   E钢筋混凝土结构   F钢结构 G其他__"
+    xlSheet.range("S2:S4").merge
+    xlSheet.cells(2, 19) = "建造方式" & Chr(10) & "A自行建造  B建筑工匠建造   C有资质的施工队伍建造   D其他__"
+    xlSheet.range("T2:T4").merge
+    xlSheet.cells(2, 20) = "建筑用途" & Chr(10) & "□教育设施（□中小学幼儿园教学用房及学生宿舍、食堂  上述功能请勾选）" & Chr(10) & "□医疗卫生（□具有外科手术室或急诊科的乡镇卫生院医疗用房 上述功能请勾选）" & Chr(10) & "□行政办公  □文化设施  □养老服务  □批发零售  □餐饮服务" & Chr(10) & "□住宿宾馆  □休闲娱乐  □宗教场所  □农贸市场  □生产加工" & Chr(10) & "□仓储物流     □其他__"
+    xlSheet.range("U2:x2").merge
+    xlSheet.cells(2, 21) = "安全鉴定"
+    xlSheet.range("U3:U4").merge
+    xlSheet.cells(3, 21) = "是否经过安全鉴定" & Chr(10) & "（是/否）"
+    xlSheet.range("V3:V4").merge
+    xlSheet.cells(3, 22) = "鉴定时间" & Chr(10) & "__年"
+    xlSheet.range("w3:w4").merge
+    xlSheet.cells(3, 23) = "鉴定或评定结论" & Chr(10) & "（A级、B级、C级、D级）"
+    xlSheet.range("x3:x4").merge
+    xlSheet.cells(3, 24) = "鉴定或评定结论" & Chr(10) & "(安全、不安全）"
+    xlSheet.range("y2:y4").merge
+    xlSheet.cells(2, 25) = "是否有连廊" & Chr(10) & "（是/否）"
+    xlSheet.range("z2:z4").merge
+    xlSheet.cells(2, 26) = "是否为简易楼" & Chr(10) & "（是/否）"
+    xlSheet.range("aa2:aa4").merge
+    xlSheet.cells(2, 27) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+    xlSheet.cells(2, 28) = "专业设计"
+    xlSheet.range("ab3:ab4").merge
+    xlSheet.cells(3, 28) = "是否进行专业设计" & Chr(10) & "（是/否）"
+    xlSheet.range("ac2:ad2").merge
+    xlSheet.cells(2, 29) = "改造情况"
+    xlSheet.range("ac3:ac4").merge
+    xlSheet.cells(3, 29) = "是否进采取抗震构造措施" & Chr(10) & "（是/否）"
+    xlSheet.range("ad3:ad4").merge
+    xlSheet.cells(3, 30) = "抗震构造措施" & Chr(10) & "圈梁；构造柱；基础地圈梁；现浇钢筋混凝土楼、屋盖；木楼、屋盖房屋横墙间距不大于三开间；门窗间墙宽度不小于900mm；  木屋盖设有剪刀撑；木屋盖与墙体有拉结措施"
+    xlSheet.range("ae2:af2").merge
+    xlSheet.cells(2, 31) = "抗震加固"
+    xlSheet.range("ae3:ae4").merge
+    xlSheet.cells(3, 31) = "是否进行过抗震加固" & Chr(10) & "（是/否）"
+    xlSheet.range("af3:af4").merge
+    xlSheet.cells(3, 32) = "抗震加固时间" & Chr(10) & "__年"
+    xlSheet.cells(2, 33) = "变形损伤"
+    xlSheet.range("ag3:ag4").merge
+    xlSheet.cells(3, 33) = "（有无明显裂缝、倾斜、变形）" & Chr(10) & "（有/无）"
+    xlSheet.range("ah2:ah4").merge
+    xlSheet.cells(2, 34) = "房屋外观、抗震构造措施和变形损伤部位照片"
+    xlSheet.range("ai2:ai4").merge
+    xlSheet.cells(2, 35) = "姓名"
+    xlSheet.range("aj2:aj4").merge
+    xlSheet.Columns(36).ColumnWidth = 12
+    xlSheet.cells(2, 36) = "联系电话"
+    xlSheet.range("ak2:ak4").merge
+    xlSheet.Columns(37).ColumnWidth = 25
+    xlSheet.cells(2, 37) = "单位"
+    xlSheet.range("aL2:aL4").merge
+    xlSheet.Columns(38).ColumnWidth = 12
+    xlSheet.cells(2, 38) = "调查日期"
+    sr = 5
+    Do While Not Rs.EOF
+        '"建筑编号"
+        xlSheet.cells(sr + i, 1) = Rs("jzbh")
+        ' "建筑地址"
+        xlSheet.cells(sr + i, 2) = Rs("address")
+        '"房屋或单位名称"
+        xlSheet.cells(sr + i, 3) = Rs("fwdwmc")
+        ' "姓名或机构名称"
+        xlSheet.cells(sr + i, 4) = Rs("xmjgmc")
+        If Not (IsNull(Rs("hzlx"))) Then
+            If Rs("hzlx") = "1" Then xlSheet.cells(sr + i, 5) = "产权人"
+            If Rs("hzlx") = "2" Then xlSheet.cells(sr + i, 5) = "使用人"
+        End If
+         ' "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+        If (Rs("blmq_is") = "TRUE") Then xlSheet.cells(sr + i, 6) = "有"
+        If (Rs("blmq_is") = "FALSE") Then xlSheet.cells(sr + i, 6) = "无"
+         ' "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+        If Not (IsNull(Rs("blmq_lx"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 7) = "A"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 7) = "B"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 7) = "C"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 7) = "D"
+        End If
+        ' "玻璃幕墙面积" & Chr(10) & "（平方米）"
+        xlSheet.cells(sr + i, 8) = Rs("blmq_mj")
+        '"竣工时间"
+        xlSheet.cells(sr + i, 9) = Rs("jgsj")
+        xlSheet.cells(sr + i, 9) = Format(xlSheet.cells(sr + i, 9), "yyyy/mm/dd")
+        xlSheet.Columns(9).ColumnWidth = 10
+        ' "设计使用年限"
+        xlSheet.cells(sr + i, 10) = Rs("sjsynx")
+        '"建筑物类别" & Chr(10) & "（楼房/平房）"
+        If Not (IsNull(Rs("jzwlb"))) Then
+            If Rs("jzwlb") = "1" Then xlSheet.cells(sr + i, 11) = "楼房"
+            If Rs("jzwlb") = "2" Then xlSheet.cells(sr + i, 11) = "平房"
+        End If
+        ' "地下层数"
+        xlSheet.cells(sr + i, 12) = Rs("cs_below")
+        ' "地上层数"
+        xlSheet.cells(sr + i, 13) = Rs("cs_up")
+        '"总建筑面积"
+        xlSheet.cells(sr + i, 14) = Rs("eara")
+        ' "地上" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 15) = Rs("eara_up")
+        ' "地下" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 16) = Rs("eara_below")
+        ' "建造年代"
+        If Not (IsNull(Rs("jznd"))) Then
+            If Rs("jznd") = "1" Then xlSheet.cells(sr + i, 17) = "A"
+            If Rs("jznd") = "2" Then xlSheet.cells(sr + i, 17) = "B"
+            If Rs("jznd") = "3" Then xlSheet.cells(sr + i, 17) = "C"
+            If Rs("jznd") = "4" Then xlSheet.cells(sr + i, 17) = "D"
+            If Rs("jznd") = "5" Then xlSheet.cells(sr + i, 17) = "E"
+            If Rs("jznd") = "6" Then xlSheet.cells(sr + i, 17) = "F"
+        End If
+        'R结构类型
+        Dim jglxstr As String
+        jglxstr = ""
+        If Not (IsNull(Rs("jglx"))) Then
+            If Rs("jglx") = "1" Then jglxstr = "A"
+            If Rs("jglx") = "2" Then jglxstr = "B"
+            If Rs("jglx") = "3" Then jglxstr = "C"
+            If Rs("jglx") = "4" Then jglxstr = "D"
+            If Rs("jglx") = "5" Then jglxstr = "E"
+            If Rs("jglx") = "6" Then jglxstr = "F"
+        End If
+        If Not (Trim(Rs("jglx_txt")) = "") Then
+            If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+            jglxstr = jglxstr + Rs("jglx_txt")
+        End If
+        xlSheet.cells(sr + i, 18) = jglxstr
+        '建造方式
+        Dim jzfsstr As String
+        jzfsstr = ""
+        If Not (IsNull(Rs("jzfs"))) Then
+            If Rs("jzfs") = "1" Then jzfsstr = "A"
+            If Rs("jzfs") = "2" Then jzfsstr = "B"
+            If Rs("jzfs") = "3" Then jzfsstr = "C"
+            If Rs("jzfs") = "4" Then jzfsstr = "D"
+        End If
+        If Not (Trim(Rs("jzfs_txt")) = "") Then
+            If Not (Trim(jzfsstr) = "") Then jzfsstr = jzfsstr + "、"
+            jzfsstr = jzfsstr + Rs("jzfs_txt")
+        End If
+        xlSheet.cells(sr + i, 19) = jzfsstr
+         ' "是否安全鉴定"
+        If (Rs("is_aqjd") = "TRUE") Then xlSheet.cells(sr + i, 21) = "是"
+        If (Rs("is_aqjd") = "FALSE") Then xlSheet.cells(sr + i, 21) = "否"
+         ' "鉴定时间"
+        xlSheet.cells(sr + i, 22) = Rs("jdtime")
+        ' "安全鉴定等级"
+         If Not (IsNull(Rs("jdpdjl"))) Then
+            If Rs("jdpdjl") = "1" Then xlSheet.cells(sr + i, 23) = "A"
+            If Rs("jdpdjl") = "2" Then xlSheet.cells(sr + i, 23) = "B"
+            If Rs("jdpdjl") = "3" Then xlSheet.cells(sr + i, 23) = "C"
+            If Rs("jdpdjl") = "4" Then xlSheet.cells(sr + i, 23) = "D"
+        End If
+         '"建筑物类别" & Chr(10) & "（楼房/平房）"
+        If Not (IsNull(Rs("jdpdjl_aq"))) Then
+            If Rs("jdpdjl_aq") = "1" Then xlSheet.cells(sr + i, 24) = "安全"
+            If Rs("jdpdjl_aq") = "2" Then xlSheet.cells(sr + i, 24) = "不安全"
+        End If
+        ' "是否有连廊" & Chr(10) & "（是/否）"
+        If (Rs("is_ll") = "TRUE") Then xlSheet.cells(sr + i, 25) = "是"
+        If (Rs("is_ll") = "FALSE") Then xlSheet.cells(sr + i, 25) = "否"
+        ' "是否为简易楼" & Chr(10) & "（是/否）"
+        If (Rs("is_jyl") = "TRUE") Then xlSheet.cells(sr + i, 26) = "是"
+        If (Rs("is_jyl") = "FALSE") Then xlSheet.cells(sr + i, 26) = "否"
+        ' "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+        If (Rs("is_mjgwg") = "TRUE") Then xlSheet.cells(sr + i, 27) = "是"
+        If (Rs("is_mjgwg") = "FALSE") Then xlSheet.cells(sr + i, 27) = "否"
+         ' "专业设计"
+        If (Rs("is_zysj") = "TRUE") Then xlSheet.cells(sr + i, 28) = "是"
+        If (Rs("is_zysj") = "FALSE") Then xlSheet.cells(sr + i, 28) = "否"
+        '"是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+        If (Rs("is_kzgzcs") = "TRUE") Then xlSheet.cells(sr + i, 29) = "是"
+        If (Rs("is_kzgzcs") = "FALSE") Then xlSheet.cells(sr + i, 29) = "否"
+        ' "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+        If (Rs("is_kzjg") = "TRUE") Then xlSheet.cells(sr + i, 31) = "是"
+        If (Rs("is_kzjg") = "FALSE") Then xlSheet.cells(sr + i, 31) = "否"
+        '"抗震加固时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 32) = Rs("jgtime")
+         ' "有无损伤"
+        If (Rs("is_bxss") = "TRUE") Then xlSheet.cells(sr + i, 33) = "有"
+        If (Rs("is_bxss") = "FALSE") Then xlSheet.cells(sr + i, 33) = "无"
+        ' "姓名"
+        xlSheet.cells(sr + i, 35) = Rs("xxcjr")
+        '"联系电话"
+        xlSheet.cells(sr + i, 36) = Rs("telephone")
+        ' "单位"
+        xlSheet.cells(sr + i, 37) = Rs("dw")
+        ' "调查日期"
+        xlSheet.cells(sr + i, 38) = Rs("dcrq")
+        xlSheet.cells(sr + i, 38) = Format(xlSheet.cells(sr + i, 37), "yyyy/mm/dd")
+        Rs.MoveNext
+        i = i + 1
+    Loop
+    xlSheet.range("a1:aL" & i + 4).Borders.LineStyle = 1
+    Rs.Close
+    xlApp.Visible = True
+End Sub
+Private Sub Command9_Click()
+    qdsql = "SELECT  T_BD_BuildInfo_RuralNotResi.* FROM T_BD_BuildInfo_RuralNotResi"
+    If (Not Trim(Me.txt_jzbh) = "") Then qdsql = qdsql + " WHERE T_BD_BuildInfo_RuralNotResi.jzbh= '" + Trim(Me.txt_jzbh) + "'"
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_RuralNotResi.id"
+    Me.Q_RuralNotResi_sub.Form.RecordSource = qdsql
+    Me.Q_RuralNotResi_sub.Requery
+    sql_eara = "SELECT count(T_BD_BuildInfo_RuralNotResi.id)as count_id,Sum(T_BD_BuildInfo_RuralNotResi.eara) as eara_all,Sum(T_BD_BuildInfo_RuralNotResi.eara_up)as eara_up,Sum(T_BD_BuildInfo_RuralNotResi.eara_below) as eara_below FROM (" + qdsql + ")"
+    Dim Rs 'As dao.Recordset
+    Set Rs = CurrentDb.OpenRecordset(sql_eara)
+    Lab_eara.Caption = Format((Rs!eara_all), ".00")
+    Lab_eara_up.Caption = Format((Rs!eara_up), ".00")
+    Lab_eara_below.Caption = Format((Rs!eara_below), ".00")
+    count_id.Caption = Rs!count_id
+End Sub
+Private Sub Form_Current()
+    Call Command9_Click
+End Sub
+Private Sub Form_Open(Cancel As Integer)
+    DoCmd.Maximize
+End Sub
+' Q_RuralNotResi_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+    qdsql = " SELECT T_BD_BuildInfo_RuralNotResi.*"
+    qdsql = qdsql + " FROM T_BD_BuildInfo_RuralNotResi"
+    qdsql = qdsql + " ORDER BY T_BD_BuildInfo_RuralNotResi.id;"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_RuralNotResi"
+End Sub
+' Q_RuralResi_Collec
+Option Compare Database
+Dim qdsql As String
+Private Sub Com_export_Click()
+    Dim Rs
+    Dim xlApp As Object     'Excel.Application
+    Dim xlBook As Object    'Excel.Workbook
+    Dim xlSheet As Object   'Excel.Worksheet
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlBook = xlApp.Workbooks.Add    '添加一个新的Book
+    Set xlSheet = xlApp.ActiveSheet     '使用当前的Sheet
+    Dim i As Long
+    Set Rs = CurrentDb.OpenRecordset(qdsql)
+    Dim sr As Integer
+    xlSheet.rows(1).RowHeight = 18
+    xlSheet.rows(2).RowHeight = 21
+    xlSheet.rows(3).RowHeight = 24
+    xlSheet.rows(4).RowHeight = 36
+    xlSheet.range("a1:ac4").HorizontalAlignment = -4108  '居中
+    xlSheet.range("a1:ac4").Font.Bold = True '字体加粗
+    xlSheet.range("a1:a4").merge     'A1：A4 合并单元格
+    xlSheet.cells(1, 1) = "农村" & Chr(10) & "住宅" & Chr(10) & "建筑（集合住宅）"   'A1中输入文字  ，其中& Chr(10) & 表示换行
+    xlSheet.range("b1:j1").merge   'b1：j1 合并单元格
+    xlSheet.cells(1, 2) = "第一部分：基本信息"  'B1中输入文字   cells(1,2)即第一行第二列，也就是B1单元格
+    xlSheet.range("b1:j4").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.range("k1:u1").merge
+    xlSheet.cells(1, 11) = "第二部分：建筑信息"
+    xlSheet.range("k1:u4").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.range("v1:x1").merge
+    xlSheet.cells(1, 22) = ""
+    xlSheet.range("v1:x4").Interior.Color = RGB(219, 238, 243) '背景的颜色 蓝灰色
+    xlSheet.range("y1:y4").merge
+    xlSheet.cells(1, 25) = "第四部分：房屋照片" & Chr(10) & "房屋外观、抗震构造措施和变形损伤部位照片 "
+    xlSheet.range("z1:ac1").merge
+    xlSheet.cells(1, 26) = "调查人信息"
+    xlSheet.range("z1:ac4").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("b2:b4").merge            '合并B2:B4单元格
+    xlSheet.Columns(2).ColumnWidth = 20     '设置第二列列宽
+    xlSheet.cells(2, 2) = "建筑地址" & Chr(10) & "__省（市、区）__市（州、盟）" & Chr(10) & " __县（市、区、旗）__街道（镇）" & Chr(10) & "__社区路（街、巷） __号__栋"  '第2行第2列单元格写入文字
+    xlSheet.range("c2:c4").merge
+    xlSheet.Columns(3).ColumnWidth = 12
+    xlSheet.cells(2, 3) = "建筑（小区）名称"
+    xlSheet.range("d2:d4").merge
+    xlSheet.Columns(4).ColumnWidth = 12
+    xlSheet.cells(2, 4) = "楼栋号或名称"
+    xlSheet.range("e2:e4").merge
+    xlSheet.Columns(5).ColumnWidth = 12
+    xlSheet.cells(2, 5) = "住宅套数"
+    xlSheet.range("f2:j2").merge
+    xlSheet.cells(2, 6) = "玻璃幕墙情况"
+    xlSheet.range("f3:f4").merge
+    xlSheet.cells(3, 6) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+    xlSheet.range("g3:g4").merge
+    xlSheet.cells(3, 7) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+    xlSheet.range("h3:h4").merge
+    xlSheet.cells(3, 8) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+    xlSheet.range("i3:i4").merge
+    xlSheet.Columns(9).ColumnWidth = 11
+    xlSheet.cells(3, 9) = "竣工时间"
+    xlSheet.range("j3:j4").merge
+    xlSheet.cells(3, 10) = "设计使用年限"
+    xlSheet.range("k2:k4").merge
+    xlSheet.cells(2, 11) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+    xlSheet.range("l2:m2").merge
+    xlSheet.cells(2, 12) = "建筑层数"
+    xlSheet.range("l3:l4").merge
+    xlSheet.cells(3, 12) = "地下层数"
+    xlSheet.range("m3:m4").merge
+    xlSheet.cells(3, 13) = "地上层数"
+    xlSheet.range("n2:p2").merge
+    xlSheet.cells(2, 14) = "建筑面积（平方米）"
+    xlSheet.range("n3:n4").merge
+    xlSheet.cells(3, 14) = "总地上" & Chr(10) & "建筑面积"
+    xlSheet.range("o3:o4").merge
+    xlSheet.cells(3, 15) = "地上" & Chr(10) & "建筑面积"
+    xlSheet.range("p3:p4").merge
+    xlSheet.cells(3, 16) = "地下" & Chr(10) & "建筑面积"
+    xlSheet.range("q2:q4").merge
+    xlSheet.cells(2, 17) = "建造年代" & Chr(10) & "（A 1980 年及以前" & Chr(10) & "B 1981-1990 年" & Chr(10) & "C 1991-2000 年" & Chr(10) & "D 2001-2010 年" & Chr(10) & "E 2011-2015 年" & Chr(10) & "F 2016 年及以后）"
+    xlSheet.range("r2:r4").merge
+    xlSheet.cells(2, 18) = "结构类型" & Chr(10) & "A砖石结构" & Chr(10) & "B钢筋混凝土结构" & Chr(10) & "C钢结构" & Chr(10) & "D其他"
+    xlSheet.range("s2:s4").merge
+    xlSheet.cells(2, 19) = "是否有连廊" & Chr(10) & "（是 / 否）"
+    xlSheet.range("t2:t4").merge
+    xlSheet.cells(2, 20) = "是否为简易楼" & Chr(10) & "（是 / 否）"
+    xlSheet.range("u2:u4").merge
+    xlSheet.cells(2, 21) = "是否为木结构屋盖" & Chr(10) & "（是 / 否）"
+    xlSheet.range("v2:w2").merge
+    xlSheet.cells(2, 22) = "抗震加固"
+    xlSheet.range("v3:v4").merge
+    xlSheet.cells(3, 22) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是/否）"
+    xlSheet.range("w3:w4").merge
+    xlSheet.cells(3, 23) = "抗震加固时间" & Chr(10) & "（____年）"
+    xlSheet.cells(2, 24) = "变形损伤"
+    xlSheet.range("x3:x4").merge
+    xlSheet.cells(3, 24) = "有无明显裂缝" & Chr(10) & "、倾斜、变形" & Chr(10) & "（有 / 无）"
+    xlSheet.range("z2:z4").merge
+    xlSheet.cells(2, 26) = "姓名"
+    xlSheet.range("aa2:aa4").merge
+    xlSheet.Columns(27).ColumnWidth = 12
+    xlSheet.cells(2, 27) = "联系电话"
+    xlSheet.range("ab2:ab4").merge
+    xlSheet.Columns(28).ColumnWidth = 25
+    xlSheet.cells(2, 28) = "单位"
+    xlSheet.range("ac2:ac4").merge
+    xlSheet.Columns(29).ColumnWidth = 12
+    xlSheet.cells(2, 29) = "调查日期"
+    sr = 5
+    Do While Not Rs.EOF
+        'xlSheet.Cells(sr, 1) = "农村住宅建筑（集合住宅）"
+        xlSheet.cells(sr + i, 1) = Rs("jzbh")    '从数据库里读出“jzbh”字段的值，写入excel中第sr+i行，1列单元格
+        'xlSheet.Cells(sr, 2) = "建筑地址"
+        xlSheet.cells(sr + i, 2) = Rs("address")
+        'xlSheet.Cells(sr, 3) = "建筑（小区）名称 ""
+        xlSheet.cells(sr + i, 3) = Rs("xqid")
+        'xlSheet.Cells(sr, 4) = "楼栋号或名称"
+        xlSheet.cells(sr + i, 4) = Rs("jzmc")
+        'xlSheet.Cells(sr, 5) = "住宅套数"
+        xlSheet.cells(sr + i, 5) = Rs("number")
+        'xlSheet.Cells(sr, 6) = "是否有玻璃幕墙" & Chr(10) & "（有/无）"
+         If (Rs("blmq_is") = "TRUE") Then xlSheet.cells(sr + i, 6) = "有"    '从数据库里读出“is_cqdj”字段的值，如果这个值为TRUE,则在excel中第sr+i行，4列单元格写入“是”
+         If (Rs("blmq_is") = "FALSE") Then xlSheet.cells(sr + i, 6) = "无"    '从数据库里读出“is_cqdj”字段的值，如果这个值为FALSE,则在excel中第sr+i行，4列单元格写入“否”
+        'xlSheet.Cells(sr, 7) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+        If Not (IsNull(Rs("blmq_lx"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 7) = "A"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 7) = "B"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 7) = "C"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 7) = "D"
+        End If
+        'xlSheet.Cells(sr, 8) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+        xlSheet.cells(sr + i, 8) = Rs("blmq_mj")
+        'xlSheet.Cells(sr, 9) = "竣工时间"
+        xlSheet.cells(sr + i, 9) = Rs("jgsj")
+        xlSheet.cells(sr + i, 9) = Format(xlSheet.cells(sr + i, 9), "yyyy/mm/dd")
+        'xlSheet.Cells(sr, 10) = "设计使用年限"
+        xlSheet.cells(sr + i, 10) = Rs("sjsynx")
+        'xlSheet.Cells(sr, 11) = "建筑物类别" & Chr(10) & "（楼房/平房）"
+        If Not (IsNull(Rs("jzwlb"))) Then
+            If Rs("jzwlb") = "1" Then xlSheet.cells(sr + i, 11) = "楼房"
+            If Rs("jzwlb") = "2" Then xlSheet.cells(sr + i, 11) = "平房"
+        End If
+        'xlSheet.Cells(sr, 12) = "地下层数"
+        xlSheet.cells(sr + i, 12) = Rs("cs_below")
+        'xlSheet.Cells(sr, 13) = "地上层数"
+        xlSheet.cells(sr + i, 13) = Rs("cs_up")
+        'xlSheet.Cells(sr, 14) = "总建筑面积"
+        xlSheet.cells(sr + i, 14) = Rs("eara")
+        'xlSheet.Cells(sr, 15) = "地上" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 15) = Rs("eara_up")
+        'xlSheet.Cells(sr, 16) = "地下" & Chr(10) & "建筑面积"
+        xlSheet.cells(sr + i, 16) = Rs("eara_below")
+        'xlSheet.Cells(sr, 17) = "建造年代" & Chr(10) & "A、B、C、D、E、F"
+        If Not (IsNull(Rs("jznd"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 17) = "A"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 17) = "B"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 17) = "C"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 17) = "D"
+            If Rs("blmq_lx") = "5" Then xlSheet.cells(sr + i, 17) = "E"
+            If Rs("blmq_lx") = "6" Then xlSheet.cells(sr + i, 17) = "F"
+        End If
+        'xlSheet.Cells(sr, 18) = "结构类型" & Chr(10) & "A砖石结构 " & Chr(10) & "B钢筋混凝土结构" & Chr(10) & " C钢结构" & Chr(10) & " D其他  "
+        Dim jglxstr As String
+        jglxstr = ""
+        If Not (IsNull(Rs("jglx"))) Then
+            If Rs("jglx") = "1" Then
+                If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+                jglxstr = jglxstr + "A"
+            End If
+            If Rs("jglx") = "2" Then
+                If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+                jglxstr = jglxstr + "B"
+            End If
+            If Rs("jglx") = "3" Then
+                If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+                jglxstr = jglxstr + "C"
+            End If
+            If Rs("jglx") = "4" Then
+                If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+                jglxstr = jglxstr + "D"
+            End If
+            If Not (IsNull(Rs("jglx_txt"))) Then
+                If Not (Trim(jglxstr) = "") Then jglxstr = jglxstr + "、"
+                jglxstr = jglxstr + Rs("jglx_txt")
+            End If
+            xlSheet.cells(sr + i, 18) = jglxstr
+        End If
+        'xlSheet.Cells(sr, 19) = "是否有连廊" & Chr(10) & "（是/否）"
+        If (Rs("is_ll") = "TRUE") Then xlSheet.cells(sr + i, 19) = "是"
+        If (Rs("is_ll") = "FALSE") Then xlSheet.cells(sr + i, 19) = "否"
+        'xlSheet.Cells(sr, 20) = "是否为简易楼" & Chr(10) & "（是/否）"
+        If (Rs("is_jyl") = "TRUE") Then xlSheet.cells(sr + i, 20) = "是"
+        If (Rs("is_jyl") = "FALSE") Then xlSheet.cells(sr + i, 20) = "否"
+        'xlSheet.Cells(sr, 21) = "是否为木结构" & Chr(10) & "屋盖" & Chr(10) & "（是/否）"
+        If (Rs("is_mjgwg") = "TRUE") Then xlSheet.cells(sr + i, 21) = "是"
+        If (Rs("is_mjgwg") = "FALSE") Then xlSheet.cells(sr + i, 21) = "否"
+        'xlSheet.Cells(sr, 22) = "是否进行过抗震" & Chr(10) & "加固" & Chr(10) & "（是 / 否）"
+        If (Rs("is_kzjg") = "TRUE") Then xlSheet.cells(sr + i, 22) = "是"
+        If (Rs("is_kzjg") = "FALSE") Then xlSheet.cells(sr + i, 22) = "否"
+        'xlSheet.Cells(sr, 23) = "抗震加固时间" & Chr(10) & "（____年）"
+        xlSheet.cells(sr + i, 23) = Rs("jgtime")
+        'xlSheet.Cells(sr, 24) = "有无有无明显裂缝、倾斜、变形" & Chr(10) & "（是/否）"
+        xlSheet.cells(sr + i, 24) = Rs("bxss")
+        If (Rs("bxss") = "TRUE") Then xlSheet.cells(sr + i, 24) = "有"
+        If (Rs("bxss") = "FALSE") Then xlSheet.cells(sr + i, 24) = "无"
+        'xlSheet.Cells(sr, 26) = "姓名"
+        xlSheet.cells(sr + i, 26) = Rs("xxcjr")
+        'xlSheet.Cells(sr, 27) = "联系电话"
+        xlSheet.cells(sr + i, 27) = Rs("telephone")
+        'xlSheet.Cells(sr, 28) = "单位"
+        xlSheet.cells(sr + i, 28) = Rs("dw")
+        'xlSheet.Cells(sr, 39) = "调查日期"
+        xlSheet.cells(sr + i, 29) = Rs("dcrq")
+        xlSheet.cells(sr + i, 29) = Format(xlSheet.cells(sr + i, 29), "yyyy/mm/dd")
+        Rs.MoveNext
+        i = i + 1
+    Loop
+    xlSheet.range("a1:ac" & i + 4).Borders.LineStyle = 1
+    Rs.Close
+    xlApp.Visible = True
+End Sub
+Private Sub Command9_Click()
+    qdsql = "SELECT  T_BD_BuildInfo_RuralResi_Collec.* FROM T_BD_BuildInfo_RuralResi_Collec"
+    If (Not Trim(Me.txt_jzbh) = "") Then qdsql = qdsql + " WHERE T_BD_BuildInfo_RuralResi_Collec.jzbh= '" + Trim(Me.txt_jzbh) + "'"
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_RuralResi_Collec.id"
+    Me.Q_RuralResi_Collec_sub.Form.RecordSource = qdsql
+    Me.Q_RuralResi_Collec_sub.Requery
+    sql_eara = "SELECT count(T_BD_BuildInfo_RuralResi_Collec.id)as count_id,Sum(T_BD_BuildInfo_RuralResi_Collec.eara) as eara_all,Sum(T_BD_BuildInfo_RuralResi_Collec.eara_up)as eara_up,Sum(T_BD_BuildInfo_RuralResi_Collec.eara_below) as eara_below FROM (" + qdsql + ")"
+    Dim Rs 'As dao.Recordset
+    Set Rs = CurrentDb.OpenRecordset(sql_eara)
+    Lab_eara.Caption = Format((Rs!eara_all), ".00")
+    Lab_eara_up.Caption = Format((Rs!eara_up), ".00")
+    Lab_eara_below.Caption = Format((Rs!eara_below), ".00")
+    count_id.Caption = Rs!count_id
+End Sub
+Private Sub Form_Load()
+    Call Command9_Click
+End Sub
+' Q_RuralResi_Collec_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+    qdsql = " SELECT T_BD_BuildInfo_RuralResi_Collec.*"
+    qdsql = qdsql + " FROM T_BD_BuildInfo_RuralResi_Collec"
+    qdsql = qdsql + " ORDER BY T_BD_BuildInfo_RuralResi_Collec.address;"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_RuralResi_Collec"
+End Sub
+' Q_RuralResi_Indep
+Option Compare Database
+   Dim qdsql As String
+Private Sub Com_export_Click()
+    Dim Rs
+    Dim xlApp As Object     'Excel.Application
+    Dim xlBook As Object    'Excel.Workbook
+    Dim xlSheet As Object   'Excel.Worksheet
+    Set xlApp = CreateObject("Excel.Application")
+    Set xlBook = xlApp.Workbooks.Add    '添加一个新的Book
+    Set xlSheet = xlApp.ActiveSheet     '使用当前的Sheet
+    Dim i As Long
+    Set Rs = CurrentDb.OpenRecordset(qdsql)
+    Dim sr As Integer
+    xlSheet.rows(1).RowHeight = 18
+    xlSheet.rows(2).RowHeight = 21
+    xlSheet.rows(3).RowHeight = 24
+    xlSheet.rows(4).RowHeight = 36
+    xlSheet.range("a1:ah4").HorizontalAlignment = -4108  '居中
+    xlSheet.range("a1:ah4").Font.Bold = True '字体加粗
+    xlSheet.range("a1:a4").merge     'A1：A4 合并单元格
+    xlSheet.cells(1, 1) = "农村住宅" & Chr(10) & "建筑" & Chr(10) & "（独立住宅）"   'A1中输入文字  ，其中& Chr(10) & 表示换行
+    xlSheet.range("b1:i1").merge   'b1：m1 合并单元格
+    xlSheet.cells(1, 2) = "第一部分：基本信息"  'B1中输入文字   cells(1,2)即第一行第二列，也就是B1单元格
+    xlSheet.range("b1:i1").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.range("j1:w1").merge
+    xlSheet.cells(1, 10) = "第二部分：建筑信息"
+    xlSheet.range("j1:w1").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.range("x1:ac1").merge
+    xlSheet.cells(1, 24) = "第三部分：抗震设防基本信息"
+    xlSheet.cells(1, 24).Interior.Color = RGB(218, 238, 243) '背景的颜色 灰蓝色
+    xlSheet.range("ad1:ad4").merge
+    xlSheet.cells(1, 30) = "第四部分：房屋照片" & Chr(10) & "房屋外观、抗震构造措施" & Chr(10) & "和变形损伤部位照片"
+    xlSheet.Columns(30).ColumnWidth = 24
+    xlSheet.range("ae1:ah1").merge
+    xlSheet.cells(1, 31) = "调查人信息"
+    xlSheet.range("ae1:ah1").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("b2:b4").merge
+    xlSheet.Columns(2).ColumnWidth = 38
+    xlSheet.cells(2, 2) = "建筑地址" & Chr(10) & "__省（市、区）__市（州、盟）__县（市、区、旗）" & Chr(10) & "__街道（镇）__社区__路（街、巷）__号__栋"
+    xlSheet.range("c2:c4").merge
+    xlSheet.Columns(3).ColumnWidth = 17
+    xlSheet.cells(2, 3) = "户主姓名"
+    xlSheet.range("d2:d4").merge
+    xlSheet.cells(2, 4) = "户主类型" & Chr(10) & "（产权人 / 使用人）"
+    xlSheet.range("b2:d2").Interior.Color = RGB(238, 236, 225) '背景的颜色 土色
+    xlSheet.Columns(4).ColumnWidth = 17
+    xlSheet.range("e2:i2").merge
+    xlSheet.cells(2, 5) = "玻璃幕墙情况"
+    xlSheet.cells(2, 5).Interior.Color = RGB(255, 255, 0) '背景的颜色 黄色
+    xlSheet.range("e2:i4").Interior.Color = RGB(255, 255, 0)
+    xlSheet.range("e3:e4").merge
+    xlSheet.Columns(5).ColumnWidth = 17
+    xlSheet.cells(3, 5) = "是否有玻璃幕墙" & Chr(10) & "（有 / 无）"
+    xlSheet.range("f3:f4").merge
+    xlSheet.Columns(6).ColumnWidth = 17
+    xlSheet.cells(3, 6) = "玻璃幕墙类型" & Chr(10) & "A构件式、B单元式、" & Chr(10) & "C点支撑、D全玻璃幕墙"
+    xlSheet.range("g3:g4").merge
+    xlSheet.Columns(7).ColumnWidth = 17
+    xlSheet.cells(3, 7) = "玻璃幕墙面积" & Chr(10) & "（平方米）"
+    xlSheet.range("h3:h4").merge
+    xlSheet.Columns(8).ColumnWidth = 17
+    xlSheet.cells(3, 8) = "竣工时间"
+    xlSheet.range("i3:i4").merge
+    xlSheet.Columns(9).ColumnWidth = 17
+    xlSheet.cells(3, 9) = "设计使用年限"
+    xlSheet.range("j2:j4").merge
+    xlSheet.cells(2, 10) = "建筑物类别" & Chr(10) & "（楼房 / 平房）"
+    xlSheet.Columns(10).ColumnWidth = 18
+    xlSheet.range("k2:l2").merge
+    xlSheet.cells(2, 11) = "建筑层数"
+    xlSheet.range("k3:k4").merge
+    xlSheet.cells(3, 11) = "地下层数"
+    xlSheet.Columns(11).ColumnWidth = 11
+    xlSheet.range("l3:l4").merge
+    xlSheet.cells(3, 12) = "地上层数"
+    xlSheet.Columns(12).ColumnWidth = 11
+    xlSheet.range("m2:m4").merge
+    xlSheet.cells(2, 13) = "建筑面积" & Chr(10) & "（平方米）"
+    xlSheet.Columns(13).ColumnWidth = 13
+    xlSheet.range("n2:n4").merge
+    xlSheet.cells(2, 14) = "建造年代" & Chr(10) & "（A 1980 年及以前" & Chr(10) & "B 1981-1990 年" & Chr(10) & "C 1991-2000 年 " & Chr(10) & "D 2001-2010 年 " & Chr(10) & "E 2011-2015 年 " & Chr(10) & " F 2016 年及以后） "
+    xlSheet.Columns(14).ColumnWidth = 22
+    xlSheet.range("o2:o4").merge
+    xlSheet.cells(2, 15) = "结构类型" & Chr(10) & "A砖石结构  B土木结构" & Chr(10) & " C混杂结构   D窑洞 " & Chr(10) & "E钢筋混凝土结构" & Chr(10) & "F钢结构 G其他__ "
+    xlSheet.Columns(15).ColumnWidth = 22
+    xlSheet.range("p2:p4").merge
+    xlSheet.cells(2, 16) = "建造方式" & Chr(10) & "A自行建造  B建筑工匠建造" & Chr(10) & " C有资质的施工队伍建造 " & Chr(10) & " D其他 "
+    xlSheet.Columns(16).ColumnWidth = 26
+    xlSheet.range("q2:t2").merge
+    xlSheet.cells(2, 17) = "安全鉴定"
+    xlSheet.range("q3:q4").merge
+    xlSheet.cells(3, 17) = "是否经过安全鉴定" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(17).ColumnWidth = 15
+    xlSheet.range("r3:r4").merge
+    xlSheet.cells(3, 18) = "鉴定时间" & Chr(10) & "（   年）"
+    xlSheet.Columns(18).ColumnWidth = 15
+    xlSheet.range("s3:s4").merge
+    xlSheet.cells(3, 19) = "鉴定或评定结论" & Chr(10) & "（A级、B级、C级、D级）"
+    xlSheet.Columns(19).ColumnWidth = 15
+    xlSheet.range("t3:t4").merge
+    xlSheet.cells(3, 20) = "鉴定或评定结论" & Chr(10) & "(安全、不安全）"
+    xlSheet.Columns(20).ColumnWidth = 19
+    xlSheet.range("j2:t3").Interior.Color = RGB(214, 227, 188) '背景的颜色 绿色
+    xlSheet.range("u2:u4").merge
+    xlSheet.cells(2, 21) = "是否有连廊" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(21).ColumnWidth = 19
+    xlSheet.range("v2:v4").merge
+    xlSheet.cells(2, 22) = "是否为简易楼" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(22).ColumnWidth = 19
+    xlSheet.range("w2:w4").merge
+    xlSheet.cells(2, 23) = "是否为木结构屋盖" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(23).ColumnWidth = 16
+    xlSheet.range("u2:w2").Interior.Color = RGB(255, 255, 0) '背景的颜色 绿色
+    xlSheet.cells(2, 24) = "专业设计"
+    xlSheet.range("x3:x4").merge
+    xlSheet.cells(3, 24) = "是否进行专业设计" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(24).ColumnWidth = 15
+    xlSheet.range("y2:z2").merge
+    xlSheet.cells(2, 25) = "改造情况"
+    xlSheet.range("y3:y4").merge
+    xlSheet.cells(3, 25) = "是否进采取抗震构造措施" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(25).ColumnWidth = 18
+    xlSheet.range("z3:z4").merge
+    xlSheet.cells(3, 26) = "抗震构造措施 " & Chr(10) & "（可多选）" & Chr(10) & "A、圈梁；B、构造柱；C、基础地圈梁；D、现浇钢筋混凝土楼、屋盖；E、木楼、屋盖房屋横墙间距不大于三开间；F、门窗间墙宽度不小于900mm； G、木屋盖设有剪刀撑；H、木屋盖与墙体有拉结措施"
+    xlSheet.Columns(26).ColumnWidth = 40
+    xlSheet.range("aa2:ab2").merge
+    xlSheet.cells(2, 27) = "抗震加固"
+    xlSheet.range("aa3:aa4").merge
+    xlSheet.cells(3, 27) = "是否进行过抗震加固(必填)" & Chr(10) & "（是 / 否）"
+    xlSheet.Columns(27).ColumnWidth = 17
+    xlSheet.range("ab3:ab4").merge
+    xlSheet.cells(3, 28) = "抗震加固时间" & Chr(10) & "（___年）"
+    xlSheet.Columns(28).ColumnWidth = 15
+    xlSheet.cells(2, 29) = "变形损伤"
+    xlSheet.range("ac3:ac4").merge
+    xlSheet.cells(3, 29) = "有无明显裂缝、倾斜、变形" & Chr(10) & "（有 / 无）"
+    xlSheet.Columns(29).ColumnWidth = 15
+    xlSheet.range("x2:ac3").Interior.Color = RGB(218, 238, 243) '背景的颜色 蓝色
+    xlSheet.range("ae2:ae4").merge
+    xlSheet.cells(2, 31) = "姓名"
+    xlSheet.Columns(31).ColumnWidth = 11
+    xlSheet.cells(2, 31).Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    xlSheet.range("af2:af4").merge
+    xlSheet.cells(2, 32) = "联系电话"
+    xlSheet.Columns(32).ColumnWidth = 14
+    xlSheet.cells(2, 32).Interior.Color = RGB(255, 255, 0) '背景的颜色 黄色
+    xlSheet.range("ag2:ag4").merge
+    xlSheet.cells(2, 33) = "单位"
+    xlSheet.Columns(33).ColumnWidth = 16
+    xlSheet.range("ah2:ah4").merge
+    xlSheet.cells(2, 34) = "调查日期"
+    xlSheet.Columns(34).ColumnWidth = 17
+    xlSheet.range("ag2:ah2").Interior.Color = RGB(253, 233, 217) '背景的颜色 粉色
+    sr = 5
+    Do While Not Rs.EOF
+        xlSheet.cells(sr + i, 1) = Rs("jzbh")    '从数据库里读出“jzbh”字段的值，写入excel中第sr+i行，1列单元格
+        xlSheet.cells(sr + i, 2) = Rs("address")
+        xlSheet.cells(sr + i, 3) = Rs("hzxm")
+        If Not (IsNull(Rs("hzlx"))) Then
+            If Rs("hzlx") = "1" Then xlSheet.cells(sr + i, 4) = "产权人"
+            If Rs("hzlx") = "2" Then xlSheet.cells(sr + i, 4) = "使用人"
+        End If
+        If (Rs("blmq_is") = "TRUE") Then xlSheet.cells(sr + i, 5) = "有"    '从数据库里读出“is_cqdj”字段的值，如果这个值为TRUE,则在excel中第sr+i行，5列单元格写入“有”
+        If (Rs("blmq_is") = "FALSE") Then xlSheet.cells(sr + i, 5) = "无"
+        If Not (IsNull(Rs("blmq_lx"))) Then
+            If Rs("blmq_lx") = "1" Then xlSheet.cells(sr + i, 6) = "构件式"
+            If Rs("blmq_lx") = "2" Then xlSheet.cells(sr + i, 6) = "单元式"
+            If Rs("blmq_lx") = "3" Then xlSheet.cells(sr + i, 6) = "点支撑"
+            If Rs("blmq_lx") = "4" Then xlSheet.cells(sr + i, 6) = "全玻璃幕墙"
+        End If
+        xlSheet.cells(sr + i, 7) = Rs("blmq_mj")
+        xlSheet.cells(sr + i, 8) = Rs("jgsj")
+        xlSheet.cells(sr + i, 8) = Format(xlSheet.cells(sr + i, 8), "yyyy/mm/dd")
+        xlSheet.cells(sr + i, 9) = Rs("sjsynx")
+        If Not (IsNull(Rs("jzwlb"))) Then
+            If Rs("jzwlb") = "1" Then xlSheet.cells(sr + i, 10) = "楼房"
+            If Rs("jzwlb") = "2" Then xlSheet.cells(sr + i, 10) = "平房"
+        End If
+        xlSheet.cells(sr + i, 11) = Rs("cs_below")
+        xlSheet.cells(sr + i, 12) = Rs("cs_up")
+        xlSheet.cells(sr + i, 13) = Rs("eara")
+        If Not (IsNull(Rs("jznd"))) Then
+            If Rs("jznd") = "1" Then xlSheet.cells(sr + i, 14) = "1980 年及以前"
+            If Rs("jznd") = "2" Then xlSheet.cells(sr + i, 14) = "1981-1990年"
+            If Rs("jznd") = "3" Then xlSheet.cells(sr + i, 14) = "1991-2000年"
+            If Rs("jznd") = "4" Then xlSheet.cells(sr + i, 14) = "2001-2010年"
+            If Rs("jznd") = "5" Then xlSheet.cells(sr + i, 14) = "2011-2015年"
+            If Rs("jznd") = "6" Then xlSheet.cells(sr + i, 14) = "2016年及以后"
+        End If
+        If Not (IsNull(Rs("jglx"))) Then
+            If Rs("jglx") = "1" Then xlSheet.cells(sr + i, 15) = "砖石结构"
+            If Rs("jglx") = "2" Then xlSheet.cells(sr + i, 15) = "土木结构"
+            If Rs("jglx") = "3" Then xlSheet.cells(sr + i, 15) = "混杂结构"
+            If Rs("jglx") = "4" Then xlSheet.cells(sr + i, 15) = "窑洞"
+            If Rs("jglx") = "5" Then xlSheet.cells(sr + i, 15) = "钢筋混凝土结构"
+            If Rs("jglx") = "6" Then xlSheet.cells(sr + i, 15) = "钢结构"
+            If Rs("jglx") = "7" Then xlSheet.cells(sr + i, 15) = Rs("jglx_txt")
+        End If
+        If Not (IsNull(Rs("jzfs"))) Then
+            If Rs("jglx") = "1" Then xlSheet.cells(sr + i, 16) = "自行建造"
+            If Rs("jglx") = "2" Then xlSheet.cells(sr + i, 16) = "建筑工匠建造"
+            If Rs("jglx") = "3" Then xlSheet.cells(sr + i, 16) = "有资质的施工队伍建造"
+            If Rs("jglx") = "4" Then xlSheet.cells(sr + i, 16) = Rs("jzfs_txt")
+        End If
+        If (Rs("is_aqjd") = "TRUE") Then xlSheet.cells(sr + i, 17) = "是"
+        If (Rs("is_aqjd") = "FALSE") Then xlSheet.cells(sr + i, 17) = "否"
+        xlSheet.cells(sr + i, 18) = Rs("jdtime")
+        If Not (IsNull(Rs("jdpdjl"))) Then
+            If Rs("jdpdjl") = "1" Then xlSheet.cells(sr + i, 19) = "A级"
+            If Rs("jdpdjl") = "2" Then xlSheet.cells(sr + i, 19) = "B级"
+            If Rs("jdpdjl") = "3" Then xlSheet.cells(sr + i, 19) = "C级"
+            If Rs("jdpdjl") = "4" Then xlSheet.cells(sr + i, 19) = "D级"
+        End If
+        If Not (IsNull(Rs("jdpdjl_aq"))) Then
+            If Rs("jdpdjl_aq") = "1" Then xlSheet.cells(sr + i, 20) = "安全"
+            If Rs("jdpdjl_aq") = "2" Then xlSheet.cells(sr + i, 20) = "不安全"
+        End If
+        If (Rs("is_ll") = "TRUE") Then xlSheet.cells(sr + i, 21) = "是"
+        If (Rs("is_ll") = "FALSE") Then xlSheet.cells(sr + i, 21) = "否"
+        If (Rs("is_jyl") = "TRUE") Then xlSheet.cells(sr + i, 22) = "是"
+        If (Rs("is_jyl") = "FALSE") Then xlSheet.cells(sr + i, 22) = "否"
+        If (Rs("is_mjgwg") = "TRUE") Then xlSheet.cells(sr + i, 23) = "是"
+        If (Rs("is_mjgwg") = "FALSE") Then xlSheet.cells(sr + i, 23) = "否"
+        If (Rs("is_zysj") = "TRUE") Then xlSheet.cells(sr + i, 24) = "是"
+        If (Rs("is_zysj") = "FALSE") Then xlSheet.cells(sr + i, 24) = "否"
+        If (Rs("is_kzgzcs") = "TRUE") Then xlSheet.cells(sr + i, 25) = "是"
+        If (Rs("is_kzgzcs") = "FALSE") Then xlSheet.cells(sr + i, 25) = "否"
+        Dim kzgzcsstr As String
+        kzgzcsstr = ""
+        If (Rs("kzgzcs_ql") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "A"
+        End If
+        If (Rs("kzgzcs_gzz") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "B"
+        End If
+        If (Rs("kzgzcs_jcdql") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "C"
+        End If
+        If (Rs("kzgzcs_xj") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "D"
+        End If
+        If (Rs("kzgzcs_mlwg") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "E"
+        End If
+        If (Rs("kzgzcs_mc") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "F"
+        End If
+        If (Rs("kzgzcs_mwgjdc") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "G"
+        End If
+        If (Rs("kzgzcs_mwgljcs") = "TRUE") Then
+            If Not (Trim(kzgzcsstr) = "") Then kzgzcsstr = kzgzcsstr + "、"
+            kzgzcsstr = kzgzcsstr + "H"
+        End If
+        xlSheet.cells(sr + i, 26) = kzgzcsstr
+        If (Rs("is_kzjg") = "TRUE") Then xlSheet.cells(sr + i, 27) = "是"
+        If (Rs("is_kzjg") = "FALSE") Then xlSheet.cells(sr + i, 27) = "否"
+        xlSheet.cells(sr + i, 28) = Rs("jgtime")
+        If (Rs("is_bxss") = "TRUE") Then xlSheet.cells(sr + i, 29) = "是"
+        If (Rs("is_bxss") = "FALSE") Then xlSheet.cells(sr + i, 29) = "否"
+        xlSheet.cells(sr + i, 31) = Rs("xxcjr")
+        xlSheet.cells(sr + i, 32) = Rs("telephone")
+        xlSheet.cells(sr + i, 33) = Rs("dw")
+        xlSheet.cells(sr + i, 34) = Rs("dcrq")
+        xlSheet.cells(sr + i, 34) = Format(xlSheet.cells(sr + i, 34), "yyyy/mm/dd")
+        Rs.MoveNext
+        i = i + 1
+    Loop
+    xlSheet.range("a1:ah" & i + 4).Borders.LineStyle = 1
+    Rs.Close
+    xlApp.Visible = True
+End Sub
+Private Sub Command9_Click()
+qdsql = "SELECT  T_BD_BuildInfo_RuralResi_Indep.* FROM T_BD_BuildInfo_RuralResi_Indep"
+    If (Not Trim(Me.txt_jzbh) = "") Then qdsql = qdsql + " WHERE T_BD_BuildInfo_RuralResi_Indep.jzbh= '" + Trim(Me.txt_jzbh) + "'"
+    qdsql = qdsql + " ORDER by T_BD_BuildInfo_RuralResi_Indep.id"
+    Me.Q_RuralResi_Indep_sub.Form.RecordSource = qdsql
+    Me.Q_RuralResi_Indep_sub.Requery
+    sql_eara = "SELECT count(T_BD_BuildInfo_RuralResi_Indep.id)as count_id,Sum(T_BD_BuildInfo_RuralResi_Indep.eara) as eara_all FROM (" + qdsql + ")"
+    Dim Rs 'As dao.Recordset
+    Set Rs = CurrentDb.OpenRecordset(sql_eara)
+    Lab_eara.Caption = Format((Rs!eara_all), ".00")
+    count_id.Caption = Rs!count_id
+End Sub
+Private Sub Form_Load()
+     Call Command9_Click
+End Sub
+' Q_RuralResi_Indep_sub
+Option Compare Database
+Private Sub Form_Load()
+    Dim qdsql As String
+   qdsql = " SELECT T_BD_BuildInfo_RuralResi_Indep.*"
+    qdsql = qdsql + " FROM T_BD_BuildInfo_RuralResi_Indep"
+    qdsql = qdsql + " ORDER BY T_BD_BuildInfo_RuralResi_Indep.address;"
+    Me.Form.RecordSource = qdsql
+    Me.Requery
+End Sub
+Private Sub jzmc_Click()
+    can_cityresi_id = ID
+    DoCmd.OpenForm "Q_by_ID_RuralResi_Indep"
+End Sub
+模块
+Option Compare Database
+Public can_cityresi_id As String
+Public iden As String
+Public user As String
+Public Sub w_Log(u As String, act As String, c_tab As String, c_jzbh As String)
+    Dim strsql As String
+    Dim logtime As String
+    logtime = Str(Now())
+    strsql = "insert into T_log (logtime,user,act,tab,tab_jzbh) values('" + logtime + "','" + u + "','" + act + "','" + c_tab + "','" + c_jzbh + "')"
+    DoCmd.SetWarnings False
+    DoCmd.RunSQL strsql
+    DoCmd.SetWarnings True
+End Sub
